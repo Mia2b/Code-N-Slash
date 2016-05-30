@@ -7,8 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
- 
+
 public class Test extends Application 
 {
     public static void main(String[] args) 
@@ -24,14 +25,12 @@ public class Test extends Application
         Scene theScene = new Scene( root );
         theStage.setScene( theScene );
      
-        Canvas canvas = new Canvas( 512, 512 );
+        Canvas canvas = new Canvas( 512*2, 512*2 );
         root.getChildren().add( canvas );
      
         GraphicsContext gc = canvas.getGraphicsContext2D();
-     
-        Image earth = new Image( "earth.png" );
-        Image sun   = new Image( "sun.PNG" );
-        Image space = new Image( "space.png" );
+        
+        Image earth = new Image( "/textures/earth.png");;
      
         final long startNanoTime = System.nanoTime();
      
@@ -39,15 +38,23 @@ public class Test extends Application
         {
             public void handle(long currentNanoTime)
             {
+            	gc.clearRect(0, 0, theScene.getWidth(), theScene.getHeight());
                 double t = (currentNanoTime - startNanoTime) / 1000000000.0; 
      
-                double x = 232 + 128 * Math.cos(t);
-                double y = 232 + 128 * Math.sin(t);
+                double x = 1 * Math.cos(t);
+                double y = 1 * Math.sin(t);
      
                 // background image clears canvas
-                gc.drawImage( space, 0, 0 );
-                gc.drawImage( earth, x, y );
-                gc.drawImage( sun, 196, 196 );
+                for(int i = 0; i < 100 ; i++){
+                	ImageView imageView = new ImageView();
+                	imageView.setImage(earth);
+                	imageView.setPreserveRatio(true);
+                	imageView.setFitHeight(500);
+                	imageView.setFitWidth(500);
+                	gc.drawImage( imageView.getImage(), x*i, y*i );
+                }
+                
+                
             }
         }.start();
      

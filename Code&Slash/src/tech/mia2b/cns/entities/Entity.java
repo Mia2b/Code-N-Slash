@@ -1,6 +1,8 @@
 package tech.mia2b.cns.entities;
 
-public class Entity {
+import javafx.scene.image.Image;
+
+public class Entity implements Cloneable{
 	public Entity(){
 		
 	}

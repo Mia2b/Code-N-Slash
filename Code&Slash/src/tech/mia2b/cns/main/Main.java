@@ -6,6 +6,8 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -34,25 +36,27 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Code & Slash");
-        Group root = new Group();
-        Scene scene = new Scene(root, 640, 360, Color.GREY);
+    	primaryStage.setMinWidth(640);
+    	primaryStage.setMinHeight(480);
+    	primaryStage.setWidth(1280);
+    	primaryStage.setHeight(720);
+		primaryStage.setTitle("Code & Slash");
+        Scene codeWindow = codeWindow(primaryStage);
         
-        Group root1 = new Group();
-        Scene cat = new Scene(root1, 640, 360, Color.GREY);
+        primaryStage.setScene(codeWindow);
+        primaryStage.show();
+    }
+
+	private Scene codeWindow(Stage primaryStage) {
+        Group root = new Group();
+        Scene scene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight(), Color.GREY);
+        
         
         GridPane gridpane = new GridPane();
         gridpane.setPadding(new Insets(16));
-        
-        
-        BorderPane border = new BorderPane();
-        border.setPadding(new Insets(20, 0, 20, 20));
 
         Button btnSave = new Button("Save");
         Button btnRun = new Button("Run");
-        
-        
-        
         
         btnSave.setMaxWidth(Double.MAX_VALUE);
         btnRun.setMaxWidth(Double.MAX_VALUE);
@@ -62,7 +66,6 @@ public class Main extends Application {
         vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth()-64)); 
         vbButtons.getChildren().addAll(btnSave, btnRun);
         
-        
         final TextArea textBox = new TextArea();
         textBox.setPrefWidth(scene.getWidth()-96);
         textBox.setPrefHeight(scene.getHeight()-32);
@@ -70,7 +73,7 @@ public class Main extends Application {
         gridpane.add(textBox, 0, 1);
         
         btnRun.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
+            @Override 
             public void handle(ActionEvent event) {
             	chunk = globals.load(textBox.getText());
             	try {
@@ -84,12 +87,22 @@ public class Main extends Application {
         btnSave.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	primaryStage.setScene(cat);
             }
         });
         
-        root.getChildren().addAll(vbButtons,gridpane);        
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
+        scene.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+            	vbButtons.setPadding(new Insets(16, 0, 0, newSceneWidth.intValue()-64)); 
+            	textBox.setPrefWidth(newSceneWidth.intValue()-96);
+            }
+        });
+        scene.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+            	textBox.setPrefHeight(newSceneHeight.intValue()-32);
+            }
+        });
+        
+        root.getChildren().addAll(vbButtons,gridpane);
+        return scene;
+	}
 }

@@ -1,5 +1,10 @@
 package tech.mia2b.cns.main;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
@@ -25,84 +30,117 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	
+
 	Globals globals = JsePlatform.standardGlobals();
 	LuaValue chunk = globals.load("print 'hello, world'");
-	
 
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-    
-    @Override
-    public void start(Stage primaryStage) {
-    	primaryStage.setMinWidth(640);
-    	primaryStage.setMinHeight(480);
-    	primaryStage.setWidth(1280);
-    	primaryStage.setHeight(720);
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) {
+		primaryStage.setMinWidth(640);
+		primaryStage.setMinHeight(480);
+		primaryStage.setWidth(1280);
+		primaryStage.setHeight(720);
 		primaryStage.setTitle("Code & Slash");
-        Scene codeWindow = codeWindow(primaryStage);
-        
-        primaryStage.setScene(codeWindow);
-        primaryStage.show();
-    }
+		Scene codeWindow = codeWindow(primaryStage);
+
+		primaryStage.setScene(codeWindow);
+		primaryStage.show();
+	}
 
 	private Scene codeWindow(Stage primaryStage) {
-        Group root = new Group();
-        Scene scene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight(), Color.GREY);
-        
-        
-        GridPane gridpane = new GridPane();
-        gridpane.setPadding(new Insets(16));
 
-        Button btnSave = new Button("Save");
-        Button btnRun = new Button("Run");
-        
-        btnSave.setMaxWidth(Double.MAX_VALUE);
-        btnRun.setMaxWidth(Double.MAX_VALUE);
+		String filePath = "F:\\res\\Testing.lua";
 
-        VBox vbButtons = new VBox();
-        vbButtons.setSpacing(8);
-        vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth()-64)); 
-        vbButtons.getChildren().addAll(btnSave, btnRun);
-        
-        final TextArea textBox = new TextArea();
-        textBox.setPrefWidth(scene.getWidth()-96);
-        textBox.setPrefHeight(scene.getHeight()-32);
-        GridPane.setHalignment(textBox, HPos.CENTER);
-        gridpane.add(textBox, 0, 1);
-        
-        btnRun.setOnAction(new EventHandler<ActionEvent>() {
-            @Override 
-            public void handle(ActionEvent event) {
-            	chunk = globals.load(textBox.getText());
-            	try {
-            		chunk.call();
-				} catch (Exception e) {
+		Group root = new Group();
+		Scene scene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight(), Color.GREY);
+
+		GridPane gridpane = new GridPane();
+		gridpane.setPadding(new Insets(16));
+
+		Button btnSave = new Button("Save");
+		Button btnLoad = new Button("Load");
+		Button btnRun = new Button("Run");
+
+		btnSave.setMaxWidth(Double.MAX_VALUE);
+		btnLoad.setMaxWidth(Double.MAX_VALUE);
+		btnRun.setMaxWidth(Double.MAX_VALUE);
+
+		VBox vbButtons = new VBox();
+		vbButtons.setSpacing(8);
+		vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth() - 64));
+		vbButtons.getChildren().addAll(btnSave, btnLoad, btnRun);
+
+		final TextArea textBox = new TextArea();
+		textBox.setPrefWidth(scene.getWidth() - 96);
+		textBox.setPrefHeight(scene.getHeight() - 32);
+		GridPane.setHalignment(textBox, HPos.CENTER);
+		gridpane.add(textBox, 0, 1);
+
+		btnSave.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+
+				try (BufferedWriter fileOut = new BufferedWriter(new FileWriter(filePath, false))) {
+					fileOut.write(textBox.getText());
+					fileOut.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+
 				}
-            	
-            }
-        });
-        
-        btnSave.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            }
-        });
-        
-        scene.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-            	vbButtons.setPadding(new Insets(16, 0, 0, newSceneWidth.intValue()-64)); 
-            	textBox.setPrefWidth(newSceneWidth.intValue()-96);
-            }
-        });
-        scene.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-            	textBox.setPrefHeight(newSceneHeight.intValue()-32);
-            }
-        });
-        
-        root.getChildren().addAll(vbButtons,gridpane);
-        return scene;
+
+			}
+		});
+
+		btnLoad.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+
+				try (BufferedReader fileIn = new BufferedReader(new FileReader(filePath))) {
+					fileIn.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+
+				}
+
+			}
+		});
+
+		btnRun.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					chunk = globals.load(textBox.getText());
+					chunk.call();
+				} catch (Exception e) {
+
+				}
+			}
+		});
+
+		scene.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
+					Number newSceneWidth) {
+				vbButtons.setPadding(new Insets(16, 0, 0, newSceneWidth.intValue() - 64));
+				textBox.setPrefWidth(newSceneWidth.intValue() - 96);
+			}
+		});
+
+		scene.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
+					Number newSceneHeight) {
+				textBox.setPrefHeight(newSceneHeight.intValue() - 32);
+			}
+		});
+
+		root.getChildren().addAll(vbButtons, gridpane);
+		return scene;
 	}
 }

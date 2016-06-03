@@ -76,24 +76,12 @@ public class Test extends Application
             public void handle(long currentNanoTime)
             {
             	gc.clearRect(0, 0, theScene.getWidth(), theScene.getHeight());
-            	
-            	
+            	lastTime = nowTime;
             	nowTime = System.nanoTime();
                 double deltaTime = (nowTime - lastTime) / 1000000000.0; 
-                lastTime = nowTime;
                 
-                if(input.contains("D")){
-                	x += 1080*deltaTime;
-                }
-                if(input.contains("A")){
-                	x -= 1080*deltaTime;
-                }
-                if(input.contains("W")){
-                	y -= 1080*deltaTime;
-                }
-                if(input.contains("S")){
-                	y += 1080*deltaTime;
-                }
+                
+                
                 
                 gc.drawImage(earth, x, y);
                 

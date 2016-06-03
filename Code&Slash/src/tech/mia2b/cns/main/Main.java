@@ -2,6 +2,7 @@ package tech.mia2b.cns.main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -64,6 +66,7 @@ public class Main extends Application {
 		Button btnSave = new Button("Save");
 		Button btnLoad = new Button("Load");
 		Button btnRun = new Button("Run");
+		Button btnImport = new Button("Import");
 
 		btnSave.setMaxWidth(Double.MAX_VALUE);
 		btnLoad.setMaxWidth(Double.MAX_VALUE);
@@ -72,7 +75,7 @@ public class Main extends Application {
 		VBox vbButtons = new VBox();
 		vbButtons.setSpacing(8);
 		vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth() - 64));
-		vbButtons.getChildren().addAll(btnSave, btnLoad, btnRun);
+		vbButtons.getChildren().addAll(btnSave, btnLoad,btnRun, btnImport);
 
 		final TextArea textBox = new TextArea();
 		textBox.setPrefWidth(scene.getWidth() - 96);
@@ -80,33 +83,27 @@ public class Main extends Application {
 		GridPane.setHalignment(textBox, HPos.CENTER);
 		gridpane.add(textBox, 0, 1);
 
+		btnImport.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Open Resource File");
+				File file = fileChooser.showOpenDialog(primaryStage);
+				textBox.setText(Util.readFile(file));
+			}
+		});
+		
 		btnSave.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-
-				try (BufferedWriter fileOut = new BufferedWriter(new FileWriter(filePath, false))) {
-					fileOut.write(textBox.getText());
-					fileOut.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-
-				}
-
+				Util.writeFile(filePath,textBox.getText());
 			}
 		});
 
 		btnLoad.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-
-				try (BufferedReader fileIn = new BufferedReader(new FileReader(filePath))) {
-					fileIn.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-
-				}
+				textBox.setText(Util.readFile(filePath));
 
 			}
 		});
@@ -142,5 +139,10 @@ public class Main extends Application {
 
 		root.getChildren().addAll(vbButtons, gridpane);
 		return scene;
+	}
+	
+	public LuaValue hello(){
+		return LuaValue.valueOf("Hello");
+		
 	}
 }

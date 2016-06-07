@@ -11,6 +11,7 @@ import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,8 +22,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
@@ -30,6 +33,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import tech.mia2b.cns.world.Control;
+import tech.mia2b.cns.world.Input;
 
 public class Main extends Application {
 
@@ -48,9 +53,69 @@ public class Main extends Application {
 		primaryStage.setHeight(720);
 		primaryStage.setTitle("Code & Slash");
 		Scene codeWindow = codeWindow(primaryStage);
-
-		primaryStage.setScene(codeWindow);
+		Scene gameWindow = gameWindow(primaryStage);
+		
+		primaryStage.setScene(gameWindow);
 		primaryStage.show();
+		
+		
+	}
+
+	private Scene gameWindow(Stage primaryStage) {
+		Group root = new Group();
+		Scene gameScene = new Scene(root, Color.color(0.2,0.2, 0.25, 1));
+		
+		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
+
+		root.getChildren().add(canvas);
+
+		gameScene.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
+					Number newSceneWidth) {
+				Control.setViewWidth(newSceneWidth.intValue());
+			}
+		});
+
+		gameScene.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
+					Number newSceneHeight) {
+				Control.setViewHeight(newSceneHeight.intValue());
+			}
+		});
+
+		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent e) {
+				Input.addKey(e);
+			}
+		});
+		
+		gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent e) {
+				Input.removeKey(e);
+			}
+		});
+		
+		Control.setGraphicsContext(canvas.getGraphicsContext2D());
+		new AnimationTimer() {
+
+			double lastTime = System.nanoTime();
+			double nowTime = System.nanoTime();
+
+			public void handle(long currentNanoTime) {
+
+				lastTime = nowTime;
+				nowTime = System.nanoTime();
+				double deltaTime = (nowTime - lastTime) / 1000000000.0;
+
+				Control.update(deltaTime);
+				Control.render();
+
+			}
+		}.start();
+		
+		return gameScene;
 	}
 
 	private Scene codeWindow(Stage primaryStage) {
@@ -58,7 +123,7 @@ public class Main extends Application {
 		String filePath = "F:\\res\\Testing.lua";
 
 		Group root = new Group();
-		Scene scene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight(), Color.GREY);
+		Scene scene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight(), Color.color(0.2,0.2, 0.25, 1));
 
 		GridPane gridpane = new GridPane();
 		gridpane.setPadding(new Insets(16));
@@ -141,8 +206,5 @@ public class Main extends Application {
 		return scene;
 	}
 	
-	public LuaValue hello(){
-		return LuaValue.valueOf("Hello");
-		
-	}
+	
 }

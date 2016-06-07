@@ -11,7 +11,7 @@ public class Entities {
 		return entities;
 	}
 	
-	public static void addEntities(Entity entity){
+	public static void addEntity(Entity entity){
 		entities.add(entity);
 	}
 }

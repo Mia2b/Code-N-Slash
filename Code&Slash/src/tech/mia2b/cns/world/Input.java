@@ -8,14 +8,14 @@ public class Input {
 	private static ArrayList<String> keys = new ArrayList<String>();
 
 	public static void addKey(KeyEvent e) {
-		String code = e.getCharacter();
+		String code = e.getCode().toString();
          // only add once... prevent duplicates
          if ( !keys.contains(code) )
              keys.add( code );
 	}
 
 	public static void removeKey(KeyEvent e) {
-		String code = e.getCharacter();
+		String code = e.getCode().toString();
 		keys.remove(code);
 	}
 	

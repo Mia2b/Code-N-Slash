@@ -33,7 +33,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import tech.mia2b.cns.entities.player.FirstPlayer;
 import tech.mia2b.cns.world.Control;
+import tech.mia2b.cns.world.Entities;
 import tech.mia2b.cns.world.Input;
 
 public class Main extends Application {
@@ -55,6 +57,7 @@ public class Main extends Application {
 		Scene codeWindow = codeWindow(primaryStage);
 		Scene gameWindow = gameWindow(primaryStage);
 		
+		Entities.addEntity(new FirstPlayer());
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();
 		

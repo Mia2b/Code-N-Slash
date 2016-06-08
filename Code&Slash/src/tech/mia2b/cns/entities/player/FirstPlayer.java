@@ -5,8 +5,8 @@ import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.world.Input;
 
 public class FirstPlayer extends Entity {
-	private double x = 0;
-	private double y = 0;
+	private double x = 64;
+	private double y = 64;
 	private double speed = 0;
 	
 	private int direction = 0;
@@ -16,7 +16,7 @@ public class FirstPlayer extends Entity {
 	private Image image;
 	
 	public FirstPlayer(){
-		image = new Image("textures/earth.png",50,50, false, false);
+		image = new Image("earth.png",50,50, false, false);
 	}
 	
 	public void action(double deltaTime){
@@ -61,7 +61,7 @@ public class FirstPlayer extends Entity {
 		} else if(speed < 0){
 			speed = 0;
 		}
-		System.out.println(speed);
+		System.out.println(x + "|"+ y);
 		move(deltaTime,(int) speed, direction);
 	}
 	

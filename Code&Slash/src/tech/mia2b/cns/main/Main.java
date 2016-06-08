@@ -23,8 +23,10 @@ import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -54,8 +56,14 @@ public class Main extends Application {
 		primaryStage.setWidth(1280);
 		primaryStage.setHeight(720);
 		primaryStage.setTitle("Code & Slash");
-		Scene codeWindow = codeWindow(primaryStage);
-		Scene gameWindow = gameWindow(primaryStage);
+		
+		Group gameRoot = new Group();
+		Scene gameWindow = new Scene(gameRoot, Color.color(0.2,0.2, 0.5, 1));
+		Group codeRoot = new Group();
+		Scene codeWindow = new Scene(codeRoot, primaryStage.getWidth(), primaryStage.getHeight(), Color.color(0.2,0.2, 0.25, 1));
+		
+		codeWindow = codeWindow(primaryStage,codeWindow, gameWindow, codeRoot);
+		gameWindow = gameWindow(primaryStage,gameWindow, codeWindow, gameRoot);
 		
 		Entities.addEntity(new FirstPlayer());
 		primaryStage.setScene(gameWindow);
@@ -63,20 +71,36 @@ public class Main extends Application {
 		
 		
 	}
-
-	private Scene gameWindow(Stage primaryStage) {
-		Group root = new Group();
-		Scene gameScene = new Scene(root, Color.color(0.2,0.2, 0.25, 1));
+	
+	
+	
+	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
 		
-		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
+		
+		Canvas canvas = new Canvas(gameScene.getWidth()- 64, gameScene.getHeight());
+		
+		
+		Button btnSwitch = new Button("Code");
+		
+		btnSwitch.setMaxWidth(Double.MAX_VALUE);
+		
+		VBox vbButtons = new VBox();
+		vbButtons.setSpacing(8);
+		vbButtons.getChildren().addAll(btnSwitch);
 
-		root.getChildren().add(canvas);
+		btnSwitch.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(changeTo);
+			}
+		});
+		
 
 		gameScene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
 					Number newSceneWidth) {
-				Control.setViewWidth(newSceneWidth.intValue());
+				Control.setViewWidth(newSceneWidth.intValue()- 64);
 			}
 		});
 
@@ -100,7 +124,11 @@ public class Main extends Application {
 			}
 		});
 		
-		Control.setGraphicsContext(canvas.getGraphicsContext2D());
+		//Image image = new Image("earth.png");
+		
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		Control.setGraphicsContext(gc);
+		
 		new AnimationTimer() {
 
 			double lastTime = System.nanoTime();
@@ -111,39 +139,42 @@ public class Main extends Application {
 				lastTime = nowTime;
 				nowTime = System.nanoTime();
 				double deltaTime = (nowTime - lastTime) / 1000000000.0;
-
+				
+				//gc.drawImage(image, 0, 0);
 				Control.update(deltaTime);
 				Control.render();
 
 			}
 		}.start();
 		
+		root.getChildren().addAll(canvas,vbButtons);
 		return gameScene;
 	}
 
-	private Scene codeWindow(Stage primaryStage) {
+	private Scene codeWindow(Stage primaryStage, Scene scene, Scene changeTo, Group root) {
 
 		String filePath = "F:\\res\\Testing.lua";
 
-		Group root = new Group();
-		Scene scene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight(), Color.color(0.2,0.2, 0.25, 1));
 
 		GridPane gridpane = new GridPane();
 		gridpane.setPadding(new Insets(16));
-
+		
+		Button btnSwitch = new Button("World");
 		Button btnSave = new Button("Save");
 		Button btnLoad = new Button("Load");
 		Button btnRun = new Button("Run");
 		Button btnImport = new Button("Import");
-
+		
+		btnSwitch.setMaxWidth(Double.MAX_VALUE);
 		btnSave.setMaxWidth(Double.MAX_VALUE);
 		btnLoad.setMaxWidth(Double.MAX_VALUE);
 		btnRun.setMaxWidth(Double.MAX_VALUE);
-
+		btnImport.setMaxWidth(Double.MAX_VALUE);
+		
 		VBox vbButtons = new VBox();
 		vbButtons.setSpacing(8);
 		vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth() - 64));
-		vbButtons.getChildren().addAll(btnSave, btnLoad,btnRun, btnImport);
+		vbButtons.getChildren().addAll(btnSwitch,btnSave, btnLoad,btnRun, btnImport);
 
 		final TextArea textBox = new TextArea();
 		textBox.setPrefWidth(scene.getWidth() - 96);
@@ -151,6 +182,14 @@ public class Main extends Application {
 		GridPane.setHalignment(textBox, HPos.CENTER);
 		gridpane.add(textBox, 0, 1);
 
+		
+		btnSwitch.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(changeTo);
+			}
+		});
+		
 		btnImport.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

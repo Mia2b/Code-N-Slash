@@ -8,8 +8,8 @@ import tech.mia2b.cns.entities.Entity;
 
 public class Control {
 	private static GraphicsContext gc;
-	private static int ViewWidth = 192;
-	private static int ViewHeight = 108;
+	private static int ViewWidth = 1920;
+	private static int ViewHeight = 1080;
    
 	public static void update(double deltaTime){
 		for(Entity entity: new ArrayList<Entity>(Entities.getEntities())){

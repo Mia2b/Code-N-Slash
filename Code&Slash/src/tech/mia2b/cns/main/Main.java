@@ -58,7 +58,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Code & Slash");
 		
 		Group gameRoot = new Group();
-		Scene gameWindow = new Scene(gameRoot, Color.color(0.2,0.2, 0.5, 1));
+		Scene gameWindow = new Scene(gameRoot,primaryStage.getWidth(), primaryStage.getHeight(),Color.color(0.9,0.9, 0.95, 1));
 		Group codeRoot = new Group();
 		Scene codeWindow = new Scene(codeRoot, primaryStage.getWidth(), primaryStage.getHeight(), Color.color(0.2,0.2, 0.25, 1));
 		
@@ -77,7 +77,7 @@ public class Main extends Application {
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
 		
 		
-		Canvas canvas = new Canvas(gameScene.getWidth()- 64, gameScene.getHeight());
+		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
 		
 		
 		Button btnSwitch = new Button("Code");

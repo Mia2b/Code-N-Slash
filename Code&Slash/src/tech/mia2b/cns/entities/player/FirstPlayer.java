@@ -7,8 +7,9 @@ import tech.mia2b.cns.world.Input;
 public class FirstPlayer extends Entity {
 	private double x = 0;
 	private double y = 0;
+	private double xSpeed = 0;
+	private double ySpeed = 0;
 	private double speed = 0;
-	
 	private int direction = 0;
 	private int maxSpeed = 2048;
 	private int acceleration = 1048;
@@ -20,46 +21,62 @@ public class FirstPlayer extends Entity {
 	}
 	
 	public void action(double deltaTime){
-		if (Input.hasKey("W") && Input.hasKey("A")) {
-			direction = 225;
-			speed += acceleration * 1 * deltaTime;
+		if (Input.hasKey("W") && Input.hasKey("A")) {	//<^ xy
+			xSpeed -= acceleration * 0.707 * deltaTime;
+			ySpeed -= acceleration * 0.707 * deltaTime;
 			
-		} else if (Input.hasKey("A") && Input.hasKey("S")) {
-			direction = 135;
-			speed += acceleration * 1 * deltaTime;
+		} else if (Input.hasKey("A") && Input.hasKey("S")) {	//<v xy
+			xSpeed -= acceleration * 0.707 * deltaTime;
+			ySpeed += acceleration * 0.707 * deltaTime;
 			
-		} else if (Input.hasKey("S") && Input.hasKey("D")) {
-			direction = 45;
-			speed += acceleration * 1 * deltaTime;
+		} else if (Input.hasKey("S") && Input.hasKey("D")) {	//v> xy
+			xSpeed += acceleration * 0.707 * deltaTime;
+			ySpeed += acceleration * 0.707 * deltaTime;
 			
-		} else if (Input.hasKey("D") && Input.hasKey("W")) {
-			direction = 315;
-			speed += acceleration * 1 * deltaTime;
+		} else if (Input.hasKey("D") && Input.hasKey("W")) {	//^> xy
+			xSpeed += acceleration * 0.707 * deltaTime;
+			ySpeed -= acceleration * 0.707 * deltaTime;
+		} else	{
 			
-		} else if (Input.hasKey("W")) {
-			direction = 270;
-			speed += acceleration * 1 * deltaTime;
+			if (Input.hasKey("W")) {				//^ y
+				ySpeed -= acceleration * 1 * deltaTime;
+				if(xSpeed < 0){
+					xSpeed += acceleration * 3 * deltaTime;
+				}else{
+					xSpeed -= acceleration * 3 * deltaTime;
+				}
+			} else if (Input.hasKey("S")) {				//v y
+				
+				ySpeed += acceleration * 1 * deltaTime;
+				if(xSpeed < 0){
+					xSpeed += acceleration * 3 * deltaTime;
+				}else{
+					xSpeed -= acceleration * 3 * deltaTime;
+				}
+			} else if (Input.hasKey("A")) {				//< x 
+				xSpeed -= acceleration * 1 * deltaTime;
+				if(ySpeed < 0){
+					ySpeed += acceleration * 3 * deltaTime;
+				}else{
+					ySpeed -= acceleration * 3 * deltaTime;
+				}
+			} else if (Input.hasKey("D")) {				//> x
+				
+				xSpeed += acceleration * 1 * deltaTime;
+				
+				if(ySpeed < 0){
+					ySpeed += acceleration * 3 * deltaTime;
+				}else{
+					ySpeed -= acceleration * 3 * deltaTime;
+				}
+					
+			}
 			
-		} else if (Input.hasKey("A")) {
-			direction = 180;
-			speed += acceleration * 1 * deltaTime;
-			
-		} else if (Input.hasKey("S")) {
-			direction = 90;
-			speed += acceleration * 1 * deltaTime;
-			
-		} else if (Input.hasKey("D")) {
-			direction = 0; 
-			speed += acceleration * 1.5 * deltaTime;
-			
-		}else {
-			speed -= acceleration * 2 * deltaTime;
-		}
-		
-		if(speed > maxSpeed){
-			speed=maxSpeed;
-		} else if(speed < 0){
-			speed = 0;
+			if(speed > maxSpeed){
+				speed=maxSpeed;
+			} else if(speed < 0){
+				speed = 0;
+			}
 		}
 		System.out.println(x + "|"+ y);
 		move(deltaTime,(int) speed, direction);

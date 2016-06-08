@@ -5,18 +5,18 @@ import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.world.Input;
 
 public class FirstPlayer extends Entity {
-	private double x = 64;
-	private double y = 64;
+	private double x = 0;
+	private double y = 0;
 	private double speed = 0;
 	
 	private int direction = 0;
 	private int maxSpeed = 2048;
 	private int acceleration = 1048;
 	
-	private Image image;
+	private Image image = new Image("textures/space.png",50,50, false, false);;
 	
 	public FirstPlayer(){
-		image = new Image("earth.png",50,50, false, false);
+		image = new Image("textures/space.png",50,50, false, false);
 	}
 	
 	public void action(double deltaTime){

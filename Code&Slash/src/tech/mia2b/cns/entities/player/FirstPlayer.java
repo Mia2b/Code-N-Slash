@@ -2,6 +2,7 @@ package tech.mia2b.cns.entities.player;
 
 import javafx.scene.image.Image;
 import tech.mia2b.cns.entities.Entity;
+import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Input;
 
 public class FirstPlayer extends Entity {
@@ -12,7 +13,7 @@ public class FirstPlayer extends Entity {
 	private double speed = 0;
 	private int direction = 0;
 	private int maxSpeed = 1048;
-	private int acceleration = 5000;
+	private int acceleration = 5096;
 	
 	private Image image = new Image("textures/space.png",50,50, false, false);;
 	
@@ -21,7 +22,8 @@ public class FirstPlayer extends Entity {
 	}
 	
 	public void action(double deltaTime){
-		
+		Camera.setCameraX(x);
+		Camera.setCameraY(y);
 		if (Input.hasKey("W")) {				//^ y
 			if(ySpeed > 0)
 				ySpeed -= acceleration * deltaTime * 2;

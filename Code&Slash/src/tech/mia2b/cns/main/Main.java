@@ -32,6 +32,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -56,34 +59,31 @@ public class Main extends Application {
 		primaryStage.setWidth(1280);
 		primaryStage.setHeight(720);
 		primaryStage.setTitle("Code & Slash");
-		
+
 		Group gameRoot = new Group();
-		Scene gameWindow = new Scene(gameRoot,primaryStage.getWidth(), primaryStage.getHeight(),Color.color(0.9,0.9, 0.95, 1));
+		Scene gameWindow = new Scene(gameRoot, primaryStage.getWidth(), primaryStage.getHeight(),
+				Color.color(0.9, 0.9, 0.95, 1));
 		Group codeRoot = new Group();
-		Scene codeWindow = new Scene(codeRoot, primaryStage.getWidth(), primaryStage.getHeight(), Color.color(0.2,0.2, 0.25, 1));
-		
-		codeWindow = codeWindow(primaryStage,codeWindow, gameWindow, codeRoot);
-		gameWindow = gameWindow(primaryStage,gameWindow, codeWindow, gameRoot);
-		
+		Scene codeWindow = new Scene(codeRoot, primaryStage.getWidth(), primaryStage.getHeight(),
+				Color.color(0.2, 0.2, 0.25, 1));
+
+		codeWindow = codeWindow(primaryStage, codeWindow, gameWindow, codeRoot);
+		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
+
 		Entities.addEntity(new FirstPlayer());
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();
-		
-		
+
 	}
-	
-	
-	
+
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
-		
-		
+
 		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
-		
-		
+
 		Button btnSwitch = new Button("Code");
-		
+
 		btnSwitch.setMaxWidth(Double.MAX_VALUE);
-		
+
 		VBox vbButtons = new VBox();
 		vbButtons.setSpacing(8);
 		vbButtons.getChildren().addAll(btnSwitch);
@@ -94,7 +94,6 @@ public class Main extends Application {
 				primaryStage.setScene(changeTo);
 			}
 		});
-		
 
 		gameScene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
@@ -117,18 +116,18 @@ public class Main extends Application {
 				Input.addKey(e);
 			}
 		});
-		
+
 		gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				Input.removeKey(e);
 			}
 		});
-		
-		//Image image = new Image("earth.png");
-		
+
+		// Image image = new Image("earth.png");
+
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Control.setGraphicsContext(gc);
-		
+
 		new AnimationTimer() {
 
 			double lastTime = System.nanoTime();
@@ -139,21 +138,26 @@ public class Main extends Application {
 				lastTime = nowTime;
 				nowTime = System.nanoTime();
 				double deltaTime = (nowTime - lastTime) / 1000000000.0;
-				
-				//gc.drawImage(image, 0, 0);
+
+				// gc.drawImage(image, 0, 0);
 				Control.update(deltaTime);
 				Control.render();
 
 			}
 		}.start();
-		
-		root.getChildren().addAll(canvas,vbButtons);
+
+		root.getChildren().addAll(canvas, vbButtons);
 		return gameScene;
 	}
 
 	private Scene codeWindow(Stage primaryStage, Scene scene, Scene changeTo, Group root) {
 
 		String filePath = "F:\\res\\Testing.lua";
+		String musicPath = "sounds/file.mp3";
+		Media media = new Media(new File(musicPath).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.setAutoPlay(true);
+		MediaView mediaView = new MediaView(mediaPlayer);
 
 
 		GridPane gridpane = new GridPane();
@@ -247,6 +251,5 @@ public class Main extends Application {
 		root.getChildren().addAll(vbButtons, gridpane);
 		return scene;
 	}
-	
-	
+
 }

@@ -1,6 +1,11 @@
 package tech.mia2b.cns.entities.player;
 
+
+import java.util.ArrayList;
+
+
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Input;
@@ -14,6 +19,7 @@ public class FirstPlayer extends Entity {
 	private int direction = 0;
 	private int maxSpeed = 1048;
 	private int acceleration = 5096;
+	private int WIDTH = 32, HEIGHT = 32;
 	
 	private Image image = new Image("textures/space.png",50,50, false, false);;
 	
@@ -126,6 +132,34 @@ public class FirstPlayer extends Entity {
 		double nextX = nextXPosition(lastActionDelta, speed, direction);
 		double nextY = nextYPosition(lastActionDelta, speed, direction);
 		
+		ArrayList<Entity> entities = new ArrayList<Entity>(Camera.getVisibleEntities());
+		if (!entities.isEmpty()) {
+			quickSort(entities);
+			for (Entity i : (entities)) {
+				if (!i.isCollidable()){
+					continue;
+				}
+					Rectangle hitBox = collisionBox(i);
+					boolean none = true;
+					while (hitBox.intersects(nextX, nextY, WIDTH, HEIGHT)) {
+						
+						none = true;
+						if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
+							nextX -= (Math.cos(Math.toRadians(direction)));
+							none = false;
+						}
+						if (hitBox.intersects(x, nextY, WIDTH, HEIGHT)) {
+							nextY = nextY - (Math.sin(Math.toRadians(direction)));
+							none = false;
+						}
+						if (none) {
+							nextY = y;
+							nextX = x;
+						}
+						
+					}
+			}
+		}
 		this.x = nextX;
 		this.y = nextY;
 
@@ -137,6 +171,43 @@ public class FirstPlayer extends Entity {
 
 	private double nextYPosition(double lastActionDelta, int ySpeed, double direction) {
 		return this.y + (Math.sin(Math.toRadians(direction)) * ySpeed * lastActionDelta);
+	}
+	
+	void quickSort(ArrayList<Entity> out) {
+		mainQuickSort(out, 0, out.size() - 1);
+	}
+
+	void mainQuickSort(ArrayList<Entity> out, int left, int right) {
+		int index = quickSortPartition(out, left, right);
+		if (left < (index - 1))
+			mainQuickSort(out, left, index - 1);
+		if (right > index)
+			mainQuickSort(out, index, right);
+	}
+
+	int quickSortPartition(ArrayList<Entity> out, int left, int right) {
+		int center = out.get((left + right) / 2).getDistanceFrom(this);
+		while (left <= right) {
+			while (out.get(left).getDistanceFrom(this) < center) {
+				left++;
+			}
+			while (out.get(right).getDistanceFrom(this) > center) {
+				right--;
+			}
+			if (left <= right) {
+				Entity temp = out.get(left);
+				out.set(left, out.get(right));
+				out.set(right, temp);
+				left++;
+				right--;
+			}
+		}
+		return left;
+	}
+	
+	private Rectangle collisionBox(Entity i) {
+		return new Rectangle(i.getX(), i.getY(), WIDTH + 1, HEIGHT + 1);
+
 	}
 
 }

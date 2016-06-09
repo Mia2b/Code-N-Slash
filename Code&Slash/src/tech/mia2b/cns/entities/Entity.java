@@ -23,4 +23,13 @@ public class Entity implements Cloneable{
 	public double getY(){
 		return 0;
 	}
+
+	public boolean isCollidable() {
+		return false;
+	}
+
+	public int getDistanceFrom(Entity ent) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

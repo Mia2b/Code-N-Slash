@@ -38,7 +38,9 @@ import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import tech.mia2b.cns.entities.enemies.FirstEnemy;
 import tech.mia2b.cns.entities.player.FirstPlayer;
+import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Control;
 import tech.mia2b.cns.world.Entities;
 import tech.mia2b.cns.world.Input;
@@ -71,6 +73,8 @@ public class Main extends Application {
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
 		Entities.addEntity(new FirstPlayer());
+		Entities.addEntity(new FirstEnemy());
+		
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();
 
@@ -100,6 +104,7 @@ public class Main extends Application {
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
 					Number newSceneWidth) {
 				canvas.setWidth(newSceneWidth.intValue());
+				Camera.setBufferWidth(newSceneWidth.intValue()/2);
 			}
 		});
 
@@ -108,6 +113,7 @@ public class Main extends Application {
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
 					Number newSceneHeight) {
 				canvas.setHeight(newSceneHeight.intValue());
+				Camera.setBufferHeight(newSceneHeight.intValue()/2);
 			}
 		});
 
@@ -153,11 +159,7 @@ public class Main extends Application {
 	private Scene codeWindow(Stage primaryStage, Scene scene, Scene changeTo, Group root) {
 
 		String filePath = "F:\\res\\Testing.lua";
-		String musicPath = "sounds/file.mp3";
-		Media media = new Media(new File(musicPath).toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(media);
-		mediaPlayer.setAutoPlay(true);
-		MediaView mediaView = new MediaView(mediaPlayer);
+		
 
 
 		GridPane gridpane = new GridPane();

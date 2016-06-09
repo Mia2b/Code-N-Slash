@@ -22,8 +22,7 @@ public class FirstPlayer extends Entity {
 	}
 	
 	public void action(double deltaTime){
-		Camera.setCameraX(x);
-		Camera.setCameraY(y);
+		
 		if (Input.hasKey("W")) {				//^ y
 			if(ySpeed > 0)
 				ySpeed -= acceleration * deltaTime * 2;
@@ -69,6 +68,8 @@ public class FirstPlayer extends Entity {
 		}
 	
 		move(deltaTime,(int) speed, direction);
+		Camera.setCameraX(x);
+		Camera.setCameraY(y);
 	}
 	private double keepInBound(double i, double j){
 		if(i < -j){

@@ -18,9 +18,10 @@ public class Control {
 	}
 	
 	public static void render(){
-		//gc.clearRect(0, 0, getViewWidth(),getViewHeight());
+		gc.clearRect(0, 0, getViewWidth(),getViewHeight());
 		for(Entity entity: new ArrayList<Entity>(Camera.getVisibleEntities())){
-			gc.drawImage(entity.getImage(), entity.getX()-Camera.getCameraX(), entity.getY()-Camera.getCameraY());
+			//System.out.println(entity);
+			gc.drawImage(entity.getImage(), entity.getX()-Camera.getCameraX()+ Camera.getBufferWidth(), entity.getY()-Camera.getCameraY()+ Camera.getBufferHeight());
 		}
 		
 	}

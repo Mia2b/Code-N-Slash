@@ -31,7 +31,8 @@ public class Camera {
 		CameraY = cameraY;
 	}
 
-	public static void setVisibleEntities() {
+
+	public static ArrayList<Entity> getVisibleEntities() {
 		visibleEntities.clear();
 
 		for (Entity i : new ArrayList<Entity>(Entities.getEntities())) {
@@ -42,9 +43,7 @@ public class Camera {
 				visibleEntities.add(i);
 			}
 		}
-	}
-
-	public static ArrayList<Entity> getVisibleEntities() {
+		
 		return visibleEntities;
 	}
 

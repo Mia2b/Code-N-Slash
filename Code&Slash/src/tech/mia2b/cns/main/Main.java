@@ -100,7 +100,7 @@ public class Main extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
 					Number newSceneWidth) {
-				Control.setViewWidth(newSceneWidth.intValue()- 64);
+				canvas.setWidth(newSceneWidth.intValue());
 			}
 		});
 
@@ -108,7 +108,7 @@ public class Main extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
 					Number newSceneHeight) {
-				Control.setViewHeight(newSceneHeight.intValue());
+				canvas.setHeight(newSceneHeight.intValue());
 			}
 		});
 

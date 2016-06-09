@@ -23,5 +23,9 @@ public class Input {
 		return keys.contains(code);
 	}
 	
+	public static ArrayList<String> getKeys(){
+		return keys;
+	}
+	
 	
 }

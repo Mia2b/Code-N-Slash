@@ -11,8 +11,8 @@ public class FirstPlayer extends Entity {
 	private double ySpeed = 0;
 	private double speed = 0;
 	private int direction = 0;
-	private int maxSpeed = 2048;
-	private int acceleration = 1048;
+	private int maxSpeed = 1048;
+	private int acceleration = 5000;
 	
 	private Image image = new Image("textures/space.png",50,50, false, false);;
 	
@@ -21,65 +21,90 @@ public class FirstPlayer extends Entity {
 	}
 	
 	public void action(double deltaTime){
-		if (Input.hasKey("W") && Input.hasKey("A")) {	//<^ xy
-			xSpeed -= acceleration * 0.707 * deltaTime;
-			ySpeed -= acceleration * 0.707 * deltaTime;
-			
-		} else if (Input.hasKey("A") && Input.hasKey("S")) {	//<v xy
-			xSpeed -= acceleration * 0.707 * deltaTime;
-			ySpeed += acceleration * 0.707 * deltaTime;
-			
-		} else if (Input.hasKey("S") && Input.hasKey("D")) {	//v> xy
-			xSpeed += acceleration * 0.707 * deltaTime;
-			ySpeed += acceleration * 0.707 * deltaTime;
-			
-		} else if (Input.hasKey("D") && Input.hasKey("W")) {	//^> xy
-			xSpeed += acceleration * 0.707 * deltaTime;
-			ySpeed -= acceleration * 0.707 * deltaTime;
-		} else	{
-			
-			if (Input.hasKey("W")) {				//^ y
-				ySpeed -= acceleration * 1 * deltaTime;
-				if(xSpeed < 0){
-					xSpeed += acceleration * 3 * deltaTime;
-				}else{
-					xSpeed -= acceleration * 3 * deltaTime;
-				}
-			} else if (Input.hasKey("S")) {				//v y
-				
-				ySpeed += acceleration * 1 * deltaTime;
-				if(xSpeed < 0){
-					xSpeed += acceleration * 3 * deltaTime;
-				}else{
-					xSpeed -= acceleration * 3 * deltaTime;
-				}
-			} else if (Input.hasKey("A")) {				//< x 
-				xSpeed -= acceleration * 1 * deltaTime;
-				if(ySpeed < 0){
-					ySpeed += acceleration * 3 * deltaTime;
-				}else{
-					ySpeed -= acceleration * 3 * deltaTime;
-				}
-			} else if (Input.hasKey("D")) {				//> x
-				
-				xSpeed += acceleration * 1 * deltaTime;
-				
-				if(ySpeed < 0){
-					ySpeed += acceleration * 3 * deltaTime;
-				}else{
-					ySpeed -= acceleration * 3 * deltaTime;
-				}
-					
+		
+		if (Input.hasKey("W")) {				//^ y
+			if(ySpeed > 0)
+				ySpeed -= acceleration * deltaTime * 2;
+			else
+				ySpeed -= acceleration * deltaTime;
+		} else 	if (Input.hasKey("S")) {				//v y
+			if(ySpeed < 0)
+				ySpeed += acceleration * deltaTime * 2;
+			else
+				ySpeed += acceleration * deltaTime;
+		} else {
+			ySpeed = subToZero(ySpeed,acceleration * deltaTime * 2);
+		}
+		ySpeed = keepInBound(ySpeed,maxSpeed);
+		
+		
+		if (Input.hasKey("A")) {	//< x 
+			if(xSpeed > 0)
+				xSpeed -= acceleration * deltaTime * 2;
+			else
+				xSpeed -= acceleration * deltaTime;
+		} else 	if (Input.hasKey("D")) {				//> x
+			if(xSpeed < 0)
+				xSpeed += acceleration * deltaTime * 2;
+			else
+				xSpeed += acceleration * deltaTime;
+		} else {
+			xSpeed = subToZero(xSpeed,acceleration * deltaTime * 2);
+		}
+		xSpeed = keepInBound(xSpeed,maxSpeed);
+		
+		
+		
+		direction = (int) Math.toDegrees(direction(xSpeed,ySpeed));
+		
+		speed = Math.sqrt(Math.pow(ySpeed, 2) + Math.pow(xSpeed, 2));
+		
+		System.out.println(direction + "|" + speed);
+		if(speed > maxSpeed){
+			speed=maxSpeed;
+		} else if(speed < 0){
+			speed = 0;
+		}
+	
+		move(deltaTime,(int) speed, direction);
+	}
+	private double keepInBound(double i, double j){
+		if(i < -j){
+			return -j;
+		}
+		if(i >  j){
+			return j;
+		}
+		return i;
+	}
+	private double subToZero(double i, double j){
+		double out = 0;
+		if(i == 0){
+			out = 0;
+		} else if(i > 0){
+			out = i-j;
+			if(out < 0){
+				out = 0;
 			}
-			
-			if(speed > maxSpeed){
-				speed=maxSpeed;
-			} else if(speed < 0){
-				speed = 0;
+		} else {
+			out = i+j;
+			if(out > 0){
+				out = 0;
 			}
 		}
-		System.out.println(x + "|"+ y);
-		move(deltaTime,(int) speed, direction);
+		return out;
+	}
+	
+	private double  direction(double x, double y) {
+	    if (x > 0)
+	        return Math.atan(y/x);
+	    if (x < 0)
+	        return Math.atan(y/x)+Math.PI;
+	    if (y > 0)
+	        return Math.PI/2;
+	    if (y < 0)
+	        return -Math.PI/2;
+	    return 0; // no direction
 	}
 	
 	public Image getImage(){

@@ -21,7 +21,6 @@ public class Control {
 		//gc.clearRect(0, 0, getViewWidth(),getViewHeight());
 		for(Entity entity: new ArrayList<Entity>(Entities.getEntities())){
 			gc.drawImage(entity.getImage(), entity.getX(), entity.getY());
-			System.out.println("Hai");
 		}
 		
 	}

@@ -1,11 +1,6 @@
 package tech.mia2b.cns.main;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
@@ -19,22 +14,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -73,7 +61,7 @@ public class Main extends Application {
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
 		Entities.addEntity(new FirstPlayer());
-		Entities.addEntity(new FirstEnemy());
+		Entities.addEntity(new FirstEnemy(0,0));
 		
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();

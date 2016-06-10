@@ -4,12 +4,14 @@ package tech.mia2b.cns.world;
 import java.util.ArrayList;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import tech.mia2b.cns.entities.Entity;
 
 public class Control {
 	private static GraphicsContext gc;
 	private static int ViewWidth = 1920;
 	private static int ViewHeight = 1080;
+	static Image image = new Image("textures/stars.png");
    
 	public static void update(double deltaTime){
 		for(Entity entity: new ArrayList<Entity>(Entities.getEntities())){
@@ -18,7 +20,7 @@ public class Control {
 	}
 	
 	public static void render(){
-		//gc.clearRect(0, 0, getViewWidth(),getViewHeight());
+		gc.drawImage(image, 0, 0);
 		for(Entity entity: new ArrayList<Entity>(Camera.getVisibleEntities())){
 			gc.drawImage(entity.getImage(), entity.getX()-Camera.getCameraX()+ Camera.getBufferWidth(), entity.getY()-Camera.getCameraY()+ Camera.getBufferHeight());
 		}

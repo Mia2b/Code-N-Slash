@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import tech.mia2b.cns.entities.Entity;
+import tech.mia2b.cns.entities.projectile.Basic;
 import tech.mia2b.cns.world.Camera;
+import tech.mia2b.cns.world.Entities;
 import tech.mia2b.cns.world.Input;
 
 public class FirstPlayer extends Entity {
@@ -17,9 +19,10 @@ public class FirstPlayer extends Entity {
 	private double ySpeed = 0;
 	private double speed = 0;
 	private int direction = 0;
-	private int maxSpeed = 1024;
-	private int acceleration = 2048;
+	private int maxSpeed = 512;
+	private int acceleration = maxSpeed*2;
 	private int WIDTH = 32, HEIGHT = 32;
+	private double cooldown = 0.5;
 	
 	private Image image = new Image("textures/earth.png",32,32, false, false);;
 	
@@ -61,6 +64,7 @@ public class FirstPlayer extends Entity {
 		
 		
 		
+		
 		direction = (int) Math.toDegrees(direction(xSpeed,ySpeed));
 		
 		speed = Math.sqrt(Math.pow(ySpeed, 2) + Math.pow(xSpeed, 2));
@@ -70,10 +74,19 @@ public class FirstPlayer extends Entity {
 		} else if(speed < 0){
 			speed = 0;
 		}
-		move(deltaTime,(int) speed, direction);
-		Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*8)*deltaTime));
-		Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*8)*deltaTime));
 		
+		if (Input.hasKey("SPACE") && cooldown <= 0){
+			Entities.addEntity(new Basic(x,y,direction));
+			cooldown = 0.5;
+		}else{
+			cooldown -= deltaTime;
+		}
+		
+		move(deltaTime,(int) speed, direction);
+	//	Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*8)*deltaTime));
+	//	Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*8)*deltaTime));
+		Camera.setCameraX(x);
+		Camera.setCameraY(y);
 	}
 	private double keepInBound(double i, double j){
 		if(i < -j){

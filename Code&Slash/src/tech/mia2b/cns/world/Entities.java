@@ -14,4 +14,8 @@ public class Entities {
 	public static void addEntity(Entity entity){
 		entities.add(entity);
 	}
+	
+	public static void removeEntity(Entity ent){
+		entities.remove(ent);
+	}
 }

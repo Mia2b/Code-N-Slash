@@ -21,6 +21,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -71,7 +72,7 @@ public class Main extends Application {
 	}
 
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
-
+		
 		double scale = 2;
 		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
 		canvas.setScaleX(scale);
@@ -83,14 +84,39 @@ public class Main extends Application {
 		VBox vbButtons = new VBox();
 		vbButtons.setSpacing(8);
 		vbButtons.getChildren().addAll(btnSwitch);
-
+		btnSwitch.setFocusTraversable(false);
 		btnSwitch.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				primaryStage.setScene(changeTo);
 			}
 		});
-
+		/*
+		root.setOnMousePressed(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		        System.out.println(event.getSceneX());
+		        System.out.println(event.getSceneY());
+		    }
+		});
+		*/
+		root.setOnMouseDragged(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		        System.out.println(event.getSceneX());
+		        System.out.println(event.getSceneY());
+		    }
+		});
+		/*
+		root.setOnMouseMoved(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		        System.out.println(event.getSceneX());
+		        System.out.println(event.getSceneY());
+		    }
+		});
+		*/
+		
 		gameScene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,

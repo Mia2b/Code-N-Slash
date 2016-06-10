@@ -72,7 +72,7 @@ public class Main extends Application {
 
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
 
-		double scale = 4;
+		double scale = 2;
 		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
 		canvas.setScaleX(scale);
 		canvas.setScaleY(scale);

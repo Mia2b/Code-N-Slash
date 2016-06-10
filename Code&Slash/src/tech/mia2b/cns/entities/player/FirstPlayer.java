@@ -21,10 +21,10 @@ public class FirstPlayer extends Entity {
 	private int acceleration = 2048;
 	private int WIDTH = 32, HEIGHT = 32;
 	
-	private Image image = new Image("textures/space.png",32,32, false, false);;
+	private Image image = new Image("textures/earth.png",32,32, false, false);;
 	
 	public FirstPlayer(){
-		image = new Image("textures/space.png",32,32, false, false);
+		image = new Image("textures/earth.png",32,32, false, false);
 	}
 	
 	public void action(double deltaTime){
@@ -71,8 +71,8 @@ public class FirstPlayer extends Entity {
 			speed = 0;
 		}
 		move(deltaTime,(int) speed, direction);
-		Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*16)*deltaTime));
-		Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*16)*deltaTime));
+		Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*8)*deltaTime));
+		Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*8)*deltaTime));
 		
 	}
 	private double keepInBound(double i, double j){

@@ -3,9 +3,8 @@ package tech.mia2b.cns.world.gen;
 import tech.mia2b.cns.entities.enemies.FirstEnemy;
 import tech.mia2b.cns.world.Entities;;
 public class MazeCreator {
-	static int [][] mapArray = new MazeGenerator(21).getIntMaze();
-	
-	public static void addMap(){
+	public static void createMaze(int size){
+		int [][] mapArray = new MazeGenerator(size).getIntMaze();
 		int midY = 32;//((mapArray.length/2)*32);
 		int midX = 0;//((mapArray[0].length/2)*32);
 		for (int i = 0; i < mapArray.length; i++) {

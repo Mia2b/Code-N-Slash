@@ -39,4 +39,10 @@ public class FirstEnemy extends Entity {
 	public int getHeight() {
 		return height;
 	}
+	
+	public int getDistanceFrom(Entity ent){
+		int deltaX = (int) (this.x - ent.getX());
+		int deltaY = (int) (this.y - ent.getY());
+		return (int)(Math.sqrt(deltaX * deltaX) + (deltaY * deltaY));
+	}
 }

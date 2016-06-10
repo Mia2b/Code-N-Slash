@@ -32,6 +32,7 @@ import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Control;
 import tech.mia2b.cns.world.Entities;
 import tech.mia2b.cns.world.Input;
+import tech.mia2b.cns.world.gen.MazeCreator;
 
 public class Main extends Application {
 
@@ -62,6 +63,7 @@ public class Main extends Application {
 
 		Entities.addEntity(new FirstPlayer());
 		Entities.addEntity(new FirstEnemy(0,0));
+		MazeCreator.createMaze(21);
 		
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();

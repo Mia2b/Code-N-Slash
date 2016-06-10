@@ -17,9 +17,9 @@ public class FirstPlayer extends Entity {
 	private double ySpeed = 0;
 	private double speed = 0;
 	private int direction = 0;
-	private int maxSpeed = 1048;
+	private int maxSpeed = 1500;
 	private int acceleration = 5096;
-	private int WIDTH = 30, HEIGHT = 30;
+	private int WIDTH = 32, HEIGHT = 32;
 	
 	private Image image = new Image("textures/space.png",32,32, false, false);;
 	
@@ -28,7 +28,6 @@ public class FirstPlayer extends Entity {
 	}
 	
 	public void action(double deltaTime){
-		
 		if (Input.hasKey("W")) {				//^ y
 			if(ySpeed > 0)
 				ySpeed -= acceleration * deltaTime * 2;
@@ -66,16 +65,15 @@ public class FirstPlayer extends Entity {
 		
 		speed = Math.sqrt(Math.pow(ySpeed, 2) + Math.pow(xSpeed, 2));
 		
-		System.out.println(direction + "|" + speed);
 		if(speed > maxSpeed){
 			speed=maxSpeed;
 		} else if(speed < 0){
 			speed = 0;
 		}
-	
 		move(deltaTime,(int) speed, direction);
-		Camera.setCameraX(x);
-		Camera.setCameraY(y);
+		Camera.setCameraX(Camera.getCameraX() + (((x - Camera.getCameraX())*8)*deltaTime));
+		Camera.setCameraY(Camera.getCameraY() + (((y - Camera.getCameraY())*8)*deltaTime));
+		
 	}
 	private double keepInBound(double i, double j){
 		if(i < -j){
@@ -142,14 +140,15 @@ public class FirstPlayer extends Entity {
 					Rectangle hitBox = collisionBox(i);
 					boolean none = true;
 					while (hitBox.intersects(nextX, nextY, WIDTH, HEIGHT)) {
-						
 						none = true;
 						if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
 							nextX -= (Math.cos(Math.toRadians(direction)))/2;
+							xSpeed = subToZero(xSpeed,acceleration * lastActionDelta * 0.5);
 							none = false;
 						}
 						if (hitBox.intersects(x, nextY, WIDTH, HEIGHT)) {
 							nextY -= (Math.sin(Math.toRadians(direction)))/2;
+							ySpeed = subToZero(ySpeed,acceleration * lastActionDelta * 0.5);
 							none = false;
 						}
 						if (none) {
@@ -157,7 +156,7 @@ public class FirstPlayer extends Entity {
 							nextX = x;
 						}
 						
-					}
+				}
 			}
 		}
 		this.x = nextX;

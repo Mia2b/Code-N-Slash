@@ -19,7 +19,7 @@ public class FirstPlayer extends Entity {
 	private int direction = 0;
 	private int maxSpeed = 1048;
 	private int acceleration = 5096;
-	private int WIDTH = 32, HEIGHT = 32;
+	private int WIDTH = 48, HEIGHT = 48;
 	
 	private Image image = new Image("textures/space.png",50,50, false, false);;
 	
@@ -145,11 +145,11 @@ public class FirstPlayer extends Entity {
 						
 						none = true;
 						if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
-							nextX -= (Math.cos(Math.toRadians(direction)));
+							nextX -= (Math.cos(Math.toRadians(direction)))/2;
 							none = false;
 						}
 						if (hitBox.intersects(x, nextY, WIDTH, HEIGHT)) {
-							nextY = nextY - (Math.sin(Math.toRadians(direction)));
+							nextY -= (Math.sin(Math.toRadians(direction)))/2;
 							none = false;
 						}
 						if (none) {

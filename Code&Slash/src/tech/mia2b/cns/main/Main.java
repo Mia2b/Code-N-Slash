@@ -47,8 +47,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setMinWidth(640);
 		primaryStage.setMinHeight(480);
-		primaryStage.setWidth(1280);
-		primaryStage.setHeight(720);
+		primaryStage.setWidth(960);
+		primaryStage.setHeight(540);
 		primaryStage.setTitle("Code & Slash");
 
 		Group gameRoot = new Group();
@@ -63,7 +63,7 @@ public class Main extends Application {
 
 		Entities.addEntity(new FirstPlayer());
 		Entities.addEntity(new FirstEnemy(0,0));
-		MazeCreator.createMaze(21);
+		MazeCreator.createMaze(30);
 		
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();
@@ -72,8 +72,10 @@ public class Main extends Application {
 
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
 
+		double scale = 4;
 		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
-
+		canvas.setScaleX(scale);
+		canvas.setScaleY(scale);
 		Button btnSwitch = new Button("Code");
 
 		btnSwitch.setMaxWidth(Double.MAX_VALUE);
@@ -97,7 +99,6 @@ public class Main extends Application {
 				Camera.setBufferWidth(newSceneWidth.intValue()/2);
 			}
 		});
-
 		gameScene.heightProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,

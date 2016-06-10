@@ -17,8 +17,8 @@ public class FirstPlayer extends Entity {
 	private double ySpeed = 0;
 	private double speed = 0;
 	private int direction = 0;
-	private int maxSpeed = 1500;
-	private int acceleration = 5096;
+	private int maxSpeed = 1024;
+	private int acceleration = 2048;
 	private int WIDTH = 32, HEIGHT = 32;
 	
 	private Image image = new Image("textures/space.png",32,32, false, false);;
@@ -71,8 +71,8 @@ public class FirstPlayer extends Entity {
 			speed = 0;
 		}
 		move(deltaTime,(int) speed, direction);
-		Camera.setCameraX(Camera.getCameraX() + (((x - Camera.getCameraX())*8)*deltaTime));
-		Camera.setCameraY(Camera.getCameraY() + (((y - Camera.getCameraY())*8)*deltaTime));
+		Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*16)*deltaTime));
+		Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*16)*deltaTime));
 		
 	}
 	private double keepInBound(double i, double j){
@@ -143,12 +143,12 @@ public class FirstPlayer extends Entity {
 						none = true;
 						if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
 							nextX -= (Math.cos(Math.toRadians(direction)))/2;
-							xSpeed = subToZero(xSpeed,acceleration * lastActionDelta * 0.5);
+							xSpeed = subToZero(xSpeed,acceleration * lastActionDelta * 0.25);
 							none = false;
 						}
 						if (hitBox.intersects(x, nextY, WIDTH, HEIGHT)) {
 							nextY -= (Math.sin(Math.toRadians(direction)))/2;
-							ySpeed = subToZero(ySpeed,acceleration * lastActionDelta * 0.5);
+							ySpeed = subToZero(ySpeed,acceleration * lastActionDelta * 0.25);
 							none = false;
 						}
 						if (none) {

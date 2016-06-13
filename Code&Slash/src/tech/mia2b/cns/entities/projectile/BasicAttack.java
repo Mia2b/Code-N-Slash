@@ -1,11 +1,12 @@
 package tech.mia2b.cns.entities.projectile;
 
 import javafx.scene.image.Image;
+import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.world.Entities;
 
-public class Basic extends Entity {
-	private Image image = new Image("textures/stars.jpg",16,16,false,false);
+public class BasicAttack extends Entity {
+	private Image image = Images.getSprite(3);
 	private double life = 2;
 	private double x = 0;
 	private double y = 0;
@@ -13,7 +14,7 @@ public class Basic extends Entity {
 	private double speed = 500;
 	
 	
-	public Basic (double x, double y, double direction ){
+	public BasicAttack (double x, double y, double direction ){
 		this.x = x;
 		this.y = y;
 		this.direction = direction;

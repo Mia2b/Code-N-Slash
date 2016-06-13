@@ -7,6 +7,9 @@ public class Entity implements Cloneable{
 	public Entity(){
 		
 	}
+	public Entity(int x, int y){
+		
+	}
 	
 	public void action(double deltaTime){
 		

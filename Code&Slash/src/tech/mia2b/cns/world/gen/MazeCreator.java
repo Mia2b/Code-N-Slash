@@ -10,7 +10,7 @@ public class MazeCreator {
 		for (int i = 0; i < mapArray.length; i++) {
 			for (int j = 0; j < mapArray[0].length; j++) {
 				if(mapArray[i][j] == 1){
-					Entities.addEntity(new FirstEnemy(i*50,j*50));
+					Entities.addEntity(new FirstEnemy(i*64,j*64));
 				}
 				if(mapArray[i][j] == 2){
 					

@@ -6,8 +6,9 @@ import java.util.ArrayList;
 
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
-import tech.mia2b.cns.entities.projectile.Basic;
+import tech.mia2b.cns.entities.projectile.BasicAttack;
 import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Entities;
 import tech.mia2b.cns.world.Input;
@@ -24,7 +25,7 @@ public class FirstPlayer extends Entity {
 	private int WIDTH = 32, HEIGHT = 32;
 	private double cooldown = 0.5;
 	
-	private Image image = new Image("textures/earth.png",32,32, false, false);;
+	private Image image = new Images.getSprite(0);
 	
 	public FirstPlayer(){
 		image = new Image("textures/earth.png",32,32, false, false);
@@ -76,7 +77,7 @@ public class FirstPlayer extends Entity {
 		}
 		
 		if (Input.hasKey("SPACE") && cooldown <= 0){
-			Entities.addEntity(new Basic(x,y,direction));
+			Entities.addEntity(new BasicAttack(x,y,direction));
 			cooldown = 0.5;
 		}else{
 			cooldown -= deltaTime;

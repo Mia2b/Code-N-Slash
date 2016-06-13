@@ -27,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.enemies.FirstEnemy;
 import tech.mia2b.cns.entities.player.FirstPlayer;
 import tech.mia2b.cns.world.Camera;
@@ -62,6 +63,7 @@ public class Main extends Application {
 		codeWindow = codeWindow(primaryStage, codeWindow, gameWindow, codeRoot);
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
+		Images.loadSprites();
 		Entities.addEntity(new FirstPlayer());
 		Entities.addEntity(new FirstEnemy(0,0));
 		MazeCreator.createMaze(30);
@@ -100,22 +102,28 @@ public class Main extends Application {
 		    }
 		});
 		*/
+		root.setOnMousePressed(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		    	Input.setMouseX(event.getSceneX());
+		    	Input.setMouseY(event.getSceneY());
+		    	Input.setMousePressed(true);
+		    }
+		});
+		root.setOnMouseReleased(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		    	Input.setMousePressed(false);
+		    }
+		});
 		root.setOnMouseDragged(new EventHandler<MouseEvent>() {
 		    @Override
 		    public void handle(MouseEvent event) {
-		        System.out.println(event.getSceneX());
-		        System.out.println(event.getSceneY());
+		    	System.out.println("Hai");
+		    	Input.setMouseX(event.getSceneX());
+		    	Input.setMouseY(event.getSceneY());
 		    }
 		});
-		/*
-		root.setOnMouseMoved(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		        System.out.println(event.getSceneX());
-		        System.out.println(event.getSceneY());
-		    }
-		});
-		*/
 		
 		gameScene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override

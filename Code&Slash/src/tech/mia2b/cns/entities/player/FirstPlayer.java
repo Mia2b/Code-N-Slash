@@ -25,7 +25,7 @@ public class FirstPlayer extends Entity {
 	private int WIDTH = 32, HEIGHT = 32;
 	private double cooldown = 0.5;
 	
-	private Image image = new Images.getSprite(0);
+	private Image image = Images.getSprite(0);
 	
 	public FirstPlayer(){
 		image = new Image("textures/earth.png",32,32, false, false);

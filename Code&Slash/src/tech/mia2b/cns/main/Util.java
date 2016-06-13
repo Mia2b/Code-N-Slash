@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import tech.mia2b.cns.entities.Entity;
 
 public class Util {
 	
@@ -50,6 +53,38 @@ public class Util {
 			e.printStackTrace();
 			System.err.println("Failed to save file!");
 		}
+	}
+	
+	public static void quickSort(ArrayList<Entity> out, Entity ent) {
+		mainQuickSort(out, 0, out.size() - 1, ent);
+	}
+
+	static void mainQuickSort(ArrayList<Entity> out, int left, int right, Entity ent) {
+		int index = quickSortPartition(out, left, right,ent);
+		if (left < (index - 1))
+			mainQuickSort(out, left, index - 1,ent);
+		if (right > index)
+			mainQuickSort(out, index, right,ent);
+	}
+
+	static int quickSortPartition(ArrayList<Entity> out, int left, int right, Entity ent) {
+		int center = out.get((left + right) / 2).getDistanceFrom(ent);
+		while (left <= right) {
+			while (out.get(left).getDistanceFrom(ent) < center) {
+				left++;
+			}
+			while (out.get(right).getDistanceFrom(ent) > center) {
+				right--;
+			}
+			if (left <= right) {
+				Entity temp = out.get(left);
+				out.set(left, out.get(right));
+				out.set(right, temp);
+				left++;
+				right--;
+			}
+		}
+		return left;
 	}
 	
 }

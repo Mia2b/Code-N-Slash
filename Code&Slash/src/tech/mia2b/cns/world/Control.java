@@ -11,7 +11,7 @@ public class Control {
 	private static GraphicsContext gc;
 	private static int ViewWidth = 1920;
 	private static int ViewHeight = 1080;
-	static Image image = new Image("textures/stars.png");
+	static Image image = new Image("textures/Ground.png");
    
 	public static void update(double deltaTime){
 		for(Entity entity: new ArrayList<Entity>(Entities.getEntities())){

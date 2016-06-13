@@ -75,7 +75,7 @@ public class Main extends Application {
 
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
 		
-		double scale = 2;
+		double scale = 1.5;
 		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
 		canvas.setScaleX(scale);
 		canvas.setScaleY(scale);
@@ -266,7 +266,7 @@ public class Main extends Application {
 				textBox.setPrefWidth(newSceneWidth.intValue() - 96);
 			}
 		});
-
+		
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
@@ -275,6 +275,10 @@ public class Main extends Application {
 			}
 		});
 
+		vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth() - 64));
+		textBox.setPrefWidth(scene.getWidth() - 96);
+		textBox.setPrefHeight(scene.getHeight() - 32);
+		
 		root.getChildren().addAll(vbButtons, gridpane);
 		return scene;
 	}

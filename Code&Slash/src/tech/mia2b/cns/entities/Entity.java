@@ -1,6 +1,7 @@
 package tech.mia2b.cns.entities;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 public class Entity implements Cloneable{
 	
@@ -41,5 +42,17 @@ public class Entity implements Cloneable{
 
 	public int getHeight() {
 		return 0;
+	}
+	public Rectangle collisionBox(Entity i) {
+		return new Rectangle(i.getX(), i.getY(), i.getWidth() + 1, i.getHeight() + 1);
+
+	}
+	public boolean isAttackable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public void takeDamage(double baseDamage) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.entities.projectile.BasicAttack;
+import tech.mia2b.cns.main.Util;
 import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Entities;
 import tech.mia2b.cns.world.Input;
@@ -76,18 +77,20 @@ public class FirstPlayer extends Entity {
 			speed = 0;
 		}
 		
-		if (Input.hasKey("SPACE") && cooldown <= 0){
-			Entities.addEntity(new BasicAttack(x,y,direction));
-			cooldown = 0.5;
+		
+		
+		move(deltaTime,(int) speed, direction);
+		Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*8)*deltaTime));
+		Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*8)*deltaTime));
+		
+		if (Input.isMousePressed() && cooldown <= 0){
+			Entities.addEntity(new BasicAttack(x+(WIDTH/4),y+(HEIGHT/4),Math.toDegrees(direction(Input.getMouseX()-Camera.getBufferWidth(),Input.getMouseY()-Camera.getBufferHeight()))));
+			cooldown = 0.1;
 		}else{
 			cooldown -= deltaTime;
 		}
-		
-		move(deltaTime,(int) speed, direction);
-	//	Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*8)*deltaTime));
-	//	Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*8)*deltaTime));
-		Camera.setCameraX(x);
-		Camera.setCameraY(y);
+	//	Camera.setCameraX(x);
+	//	Camera.setCameraY(y);
 	}
 	private double keepInBound(double i, double j){
 		if(i < -j){
@@ -146,7 +149,7 @@ public class FirstPlayer extends Entity {
 		
 		ArrayList<Entity> entities = new ArrayList<Entity>(Camera.getVisibleEntities());
 		if (!entities.isEmpty()) {
-			quickSort(entities);
+			Util.quickSort(entities,this);
 			for (Entity i : (entities)) {
 				if (!i.isCollidable()){
 					continue;
@@ -186,41 +189,8 @@ public class FirstPlayer extends Entity {
 		return this.y + (Math.sin(Math.toRadians(direction)) * ySpeed * lastActionDelta);
 	}
 	
-	void quickSort(ArrayList<Entity> out) {
-		mainQuickSort(out, 0, out.size() - 1);
-	}
-
-	void mainQuickSort(ArrayList<Entity> out, int left, int right) {
-		int index = quickSortPartition(out, left, right);
-		if (left < (index - 1))
-			mainQuickSort(out, left, index - 1);
-		if (right > index)
-			mainQuickSort(out, index, right);
-	}
-
-	int quickSortPartition(ArrayList<Entity> out, int left, int right) {
-		int center = out.get((left + right) / 2).getDistanceFrom(this);
-		while (left <= right) {
-			while (out.get(left).getDistanceFrom(this) < center) {
-				left++;
-			}
-			while (out.get(right).getDistanceFrom(this) > center) {
-				right--;
-			}
-			if (left <= right) {
-				Entity temp = out.get(left);
-				out.set(left, out.get(right));
-				out.set(right, temp);
-				left++;
-				right--;
-			}
-		}
-		return left;
-	}
 	
-	private Rectangle collisionBox(Entity i) {
-		return new Rectangle(i.getX(), i.getY(), i.getWidth() + 1, i.getHeight() + 1);
-
-	}
+	
+	
 
 }

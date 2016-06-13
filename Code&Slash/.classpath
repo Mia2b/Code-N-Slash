@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LuaJ-3.0.1"/>
 	<classpathentry kind="lib" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LuaJ"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LuaJ_3.0.1"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

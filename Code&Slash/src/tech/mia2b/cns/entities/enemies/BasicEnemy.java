@@ -53,7 +53,7 @@ public class BasicEnemy extends Entity {
 					continue;
 				}
 					Rectangle hitBox = collisionBox(i);
-					if (hitBox.intersects(x, y, 48, 48)) {
+					if (hitBox.intersects(x, y, WIDTH, HEIGHT)) {
 						attack(i);	
 					}	
 				}

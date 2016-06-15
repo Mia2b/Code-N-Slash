@@ -65,8 +65,9 @@ public class Main extends Application {
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
 		Images.loadSprites();
-		MazeCreator.createMaze(8,8);
-		Entities.addEntity(new FirstPlayer());
+		MazeCreator.createMaze(9,5);
+		
+		Entities.addEntity(new FirstPlayer(0,0));
 		
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();
@@ -122,7 +123,6 @@ public class Main extends Application {
 		root.setOnMouseDragged(new EventHandler<MouseEvent>() {
 		    @Override
 		    public void handle(MouseEvent event) {
-		    	System.out.println("Hai");
 		    	Input.setMouseX(event.getSceneX());
 		    	Input.setMouseY(event.getSceneY());
 		    }

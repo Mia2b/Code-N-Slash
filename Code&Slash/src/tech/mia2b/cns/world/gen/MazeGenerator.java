@@ -330,9 +330,9 @@ public class MazeGenerator {
 
 				output[x][y] = grid[x][y];
 				if (x == 0 && y == 1) {
-					output[x][y] = 0;
+					//output[x][y] = 0;
 				} else if (x == gridDimensionX - 1 && y == gridDimensionY - 2) {
-					output[x][y] = 0;
+					//output[x][y] = 0;
 				}
 			}
 		}

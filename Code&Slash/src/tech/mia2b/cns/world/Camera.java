@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import tech.mia2b.cns.entities.Entity;
 
 public class Camera {
-	private static double CameraX = getBufferWidth();
-	private static double CameraY = getBufferHeight();
+	
 
 	private static int bufferWidth = 1920;
 	private static int bufferHeight = 1080;
 
+	
+	private static double CameraX = getBufferWidth();
+	private static double CameraY = getBufferHeight();
+	
 	private static int renderBuffer = 64;
-
+#
 	private static volatile ArrayList<Entity> visibleEntities = new ArrayList<Entity>();
 
 	public static int getCameraX() {

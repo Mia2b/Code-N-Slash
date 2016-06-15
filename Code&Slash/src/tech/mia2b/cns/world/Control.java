@@ -21,7 +21,7 @@ public class Control {
 	}
 	
 	public static void render(){
-		//gc.drawImage(image, 0, 0);
+		gc.drawImage(image, 0, 0);
 		for(Entity entity: new ArrayList<Entity>(Camera.getVisibleEntities())){
 			gc.drawImage(entity.getImage(), entity.getX()-Camera.getCameraX()+ Camera.getBufferWidth(), entity.getY()-Camera.getCameraY()+ Camera.getBufferHeight());
 		}

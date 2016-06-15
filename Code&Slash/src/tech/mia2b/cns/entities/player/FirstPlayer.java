@@ -27,19 +27,26 @@ public class FirstPlayer extends Entity {
 	private boolean player = true;
 	private double cooldown = 0;
 	private double freshCooldown = 0.075;
-	private double lerp = 6;
+	private double lerp = 8;
 	private double hp = 10000;
+	private boolean active = false;
 
 	private Image image = Images.getSprite(0);
 
-	public FirstPlayer() {
-		image = new Image("textures/earth.png", 32, 32, false, false);
+	public FirstPlayer(int x, int y) {
+		this.x = x;
+		this.y = y;
+		for(int i = 0;i < 360;i++){
+			Entities.addEntity(new BasicAttack(x,y,i));
+		}
 	}
 	public boolean isPlayer(){
 		return player;
 	}
 	public void action(double deltaTime) {
+		System.out.println(x + " | " + y);
 		if(hp<=0){
+			System.out.println(this+ "died");
 			die();
 		}
 		if (Input.hasKey("W")) { // ^ y
@@ -75,7 +82,6 @@ public class FirstPlayer extends Entity {
 		direction = (int) Math.toDegrees(direction(xSpeed, ySpeed));
 
 		speed = Math.sqrt(Math.pow(ySpeed, 2) + Math.pow(xSpeed, 2));
-
 		if (speed > maxSpeed) {
 			speed = maxSpeed;
 		} else if (speed < 0) {
@@ -98,8 +104,8 @@ public class FirstPlayer extends Entity {
 			cooldown -= deltaTime;
 		}
 		
-		// Camera.setCameraX(x);
-		// Camera.setCameraY(y);
+		//Camera.setCameraX(x);
+		//Camera.setCameraY(y);
 		Main.setpro(hp/10000);
 	}
 
@@ -154,6 +160,12 @@ public class FirstPlayer extends Entity {
 	public double getY() {
 		return y;
 	}
+	public int getWidth(){
+		return WIDTH;
+	}
+	public int getHeight(){
+		return HEIGHT;
+	}
 
 	private void move(double lastActionDelta, int speed, double direction) {
 		double nextX = nextXPosition(lastActionDelta, speed, direction);
@@ -169,6 +181,7 @@ public class FirstPlayer extends Entity {
 				Rectangle hitBox = collisionBox(i);
 				boolean none = true;
 				while (hitBox.intersects(nextX, nextY, WIDTH, HEIGHT)) {
+					
 					none = true;
 					if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
 						nextX -= (Math.cos(Math.toRadians(direction))) / 2;
@@ -190,6 +203,7 @@ public class FirstPlayer extends Entity {
 		}
 		this.x = nextX;
 		this.y = nextY;
+		
 
 	}
 
@@ -201,6 +215,7 @@ public class FirstPlayer extends Entity {
 		return this.y + (Math.sin(Math.toRadians(direction)) * ySpeed * lastActionDelta);
 	}
 	public void takeDamage(double damage) {
+		if(active)
 		hp -= damage;
 	}
 	private void die() {

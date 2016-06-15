@@ -4,8 +4,7 @@ import tech.mia2b.cns.entities.Cluster;
 import tech.mia2b.cns.entities.enemies.Wall;
 import tech.mia2b.cns.world.Entities;;
 public class MazeCreator {
-	public static void createMaze(int size){
-		int clusterSize = 3;
+	public static void createMaze(int size, int clusterSize){
 		int wh = 64;
 		int [][] mapArray = new MazeGenerator(size).getIntMaze();
 		for (int i = 0; i < mapArray.length; i++) {

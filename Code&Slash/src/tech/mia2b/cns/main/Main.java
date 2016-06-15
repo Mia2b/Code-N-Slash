@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tech.mia2b.cns.assets.Images;
+import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.entities.enemies.Wall;
 import tech.mia2b.cns.entities.player.FirstPlayer;
 import tech.mia2b.cns.world.Camera;
@@ -40,7 +42,7 @@ public class Main extends Application {
 
 	Globals globals = JsePlatform.standardGlobals();
 	LuaValue chunk = globals.load("print 'hello, world'");
-
+	static ProgressBar pb;
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
@@ -52,7 +54,6 @@ public class Main extends Application {
 		primaryStage.setWidth(960);
 		primaryStage.setHeight(540);
 		primaryStage.setTitle("Code & Slash");
-
 		Group gameRoot = new Group();
 		Scene gameWindow = new Scene(gameRoot, primaryStage.getWidth(), primaryStage.getHeight(),
 				Color.color(0.9, 0.9, 0.95, 1));
@@ -64,12 +65,15 @@ public class Main extends Application {
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
 		Images.loadSprites();
-		MazeCreator.createMaze(8);
+		MazeCreator.createMaze(8,8);
 		Entities.addEntity(new FirstPlayer());
 		
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();
 
+	}
+	public static void setpro(double i){
+		pb.setProgress(i);
 	}
 
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
@@ -175,8 +179,10 @@ public class Main extends Application {
 
 			}
 		}.start();
-
-		root.getChildren().addAll(canvas, vbButtons);
+		pb = new ProgressBar(0.0);
+		pb.setPrefWidth(400);
+		
+		root.getChildren().addAll(canvas, vbButtons,pb);
 		return gameScene;
 	}
 

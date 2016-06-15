@@ -1,10 +1,13 @@
 package tech.mia2b.cns.entities;
 
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 public class Entity implements Cloneable{
-	
+	public boolean isPlayer(){
+		return false;
+	}
 	public Entity(){
 		
 	}
@@ -51,6 +54,9 @@ public class Entity implements Cloneable{
 		return false;
 	}
 	public void takeDamage(double baseDamage) {
+		
+	}
+	public void linkHpBar(ProgressBar pb) {
 		
 	}
 }

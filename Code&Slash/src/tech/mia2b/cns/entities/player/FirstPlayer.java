@@ -2,11 +2,13 @@ package tech.mia2b.cns.entities.player;
 
 import java.util.ArrayList;
 
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.entities.projectile.BasicAttack;
+import tech.mia2b.cns.main.Main;
 import tech.mia2b.cns.main.Util;
 import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Entities;
@@ -22,17 +24,24 @@ public class FirstPlayer extends Entity {
 	private int maxSpeed = 300;
 	private int acceleration = maxSpeed * 2;
 	private int WIDTH = 30, HEIGHT = 30;
+	private boolean player = true;
 	private double cooldown = 0;
 	private double freshCooldown = 0.075;
 	private double lerp = 6;
+	private double hp = 10000;
 
 	private Image image = Images.getSprite(0);
 
 	public FirstPlayer() {
 		image = new Image("textures/earth.png", 32, 32, false, false);
 	}
-
+	public boolean isPlayer(){
+		return player;
+	}
 	public void action(double deltaTime) {
+		if(hp<=0){
+			die();
+		}
 		if (Input.hasKey("W")) { // ^ y
 			if (ySpeed > 0)
 				ySpeed -= acceleration * deltaTime * 2;
@@ -88,8 +97,10 @@ public class FirstPlayer extends Entity {
 		} else {
 			cooldown -= deltaTime;
 		}
+		
 		// Camera.setCameraX(x);
 		// Camera.setCameraY(y);
+		Main.setpro(hp/10000);
 	}
 
 	private double keepInBound(double i, double j) {
@@ -189,5 +200,11 @@ public class FirstPlayer extends Entity {
 	private double nextYPosition(double lastActionDelta, int ySpeed, double direction) {
 		return this.y + (Math.sin(Math.toRadians(direction)) * ySpeed * lastActionDelta);
 	}
-
+	public void takeDamage(double damage) {
+		hp -= damage;
+	}
+	private void die() {
+		Entities.removeEntity(this);
+	}
+	
 }

@@ -1,8 +1,6 @@
 package tech.mia2b.cns.entities.player;
 
-
 import java.util.ArrayList;
-
 
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -21,158 +19,161 @@ public class FirstPlayer extends Entity {
 	private double ySpeed = 0;
 	private double speed = 0;
 	private int direction = 0;
-	private int maxSpeed = 512;
-	private int acceleration = maxSpeed*2;
-	private int WIDTH = 32, HEIGHT = 32;
-	private double cooldown = 0.5;
-	
+	private int maxSpeed = 300;
+	private int acceleration = maxSpeed * 2;
+	private int WIDTH = 30, HEIGHT = 30;
+	private double cooldown = 0;
+	private double freshCooldown = 0.075;
+	private double lerp = 6;
+
 	private Image image = Images.getSprite(0);
-	
-	public FirstPlayer(){
-		image = new Image("textures/earth.png",32,32, false, false);
+
+	public FirstPlayer() {
+		image = new Image("textures/earth.png", 32, 32, false, false);
 	}
-	
-	public void action(double deltaTime){
-		if (Input.hasKey("W")) {				//^ y
-			if(ySpeed > 0)
+
+	public void action(double deltaTime) {
+		if (Input.hasKey("W")) { // ^ y
+			if (ySpeed > 0)
 				ySpeed -= acceleration * deltaTime * 2;
 			else
 				ySpeed -= acceleration * deltaTime;
-		} else 	if (Input.hasKey("S")) {				//v y
-			if(ySpeed < 0)
+		} else if (Input.hasKey("S")) { // v y
+			if (ySpeed < 0)
 				ySpeed += acceleration * deltaTime * 2;
 			else
 				ySpeed += acceleration * deltaTime;
 		} else {
-			ySpeed = subToZero(ySpeed,acceleration * deltaTime * 2);
+			ySpeed = subToZero(ySpeed, acceleration * deltaTime * 2);
 		}
-		ySpeed = keepInBound(ySpeed,maxSpeed);
-		
-		
-		if (Input.hasKey("A")) {	//< x 
-			if(xSpeed > 0)
+		ySpeed = keepInBound(ySpeed, maxSpeed);
+
+		if (Input.hasKey("A")) { // < x
+			if (xSpeed > 0)
 				xSpeed -= acceleration * deltaTime * 2;
 			else
 				xSpeed -= acceleration * deltaTime;
-		} else 	if (Input.hasKey("D")) {				//> x
-			if(xSpeed < 0)
+		} else if (Input.hasKey("D")) { // > x
+			if (xSpeed < 0)
 				xSpeed += acceleration * deltaTime * 2;
 			else
 				xSpeed += acceleration * deltaTime;
 		} else {
-			xSpeed = subToZero(xSpeed,acceleration * deltaTime * 2);
+			xSpeed = subToZero(xSpeed, acceleration * deltaTime * 2);
 		}
-		xSpeed = keepInBound(xSpeed,maxSpeed);
-		
-		
-		
-		
-		direction = (int) Math.toDegrees(direction(xSpeed,ySpeed));
-		
+		xSpeed = keepInBound(xSpeed, maxSpeed);
+
+		direction = (int) Math.toDegrees(direction(xSpeed, ySpeed));
+
 		speed = Math.sqrt(Math.pow(ySpeed, 2) + Math.pow(xSpeed, 2));
-		
-		if(speed > maxSpeed){
-			speed=maxSpeed;
-		} else if(speed < 0){
+
+		if (speed > maxSpeed) {
+			speed = maxSpeed;
+		} else if (speed < 0) {
 			speed = 0;
 		}
-		
-		
-		
-		move(deltaTime,(int) speed, direction);
-		Camera.setCameraX(Camera.getCameraX() + ((((x+WIDTH/2) - Camera.getCameraX())*8)*deltaTime));
-		Camera.setCameraY(Camera.getCameraY() + ((((y+HEIGHT/2) - Camera.getCameraY())*8)*deltaTime));
-		
-		if (Input.isMousePressed() && cooldown <= 0){
-			Entities.addEntity(new BasicAttack(x+(WIDTH/4),y+(HEIGHT/4),Math.toDegrees(direction(Input.getMouseX()-Camera.getBufferWidth(),Input.getMouseY()-Camera.getBufferHeight()))));
-			cooldown = 0.1;
-		}else{
+
+		move(deltaTime, (int) speed, direction);
+		Camera.setCameraX(Camera.getCameraX() + ((((x + WIDTH / 2) - Camera.getCameraX()) * lerp) * deltaTime));
+		Camera.setCameraY(Camera.getCameraY() + ((((y + HEIGHT / 2) - Camera.getCameraY()) * lerp) * deltaTime));
+
+		if (Input.isMousePressed() && cooldown <= 0) {
+			Entities.addEntity(new BasicAttack(x + (WIDTH / 4), y + (HEIGHT / 4),
+					Math.toDegrees(direction(
+							Input.getMouseX()+Camera.getCameraX()-Camera.getBufferWidth()-x//-(WIDTH/2)
+							,
+							Input.getMouseY()+Camera.getCameraY()-Camera.getBufferHeight()-y//-(HEIGHT/2)
+							))));
+			cooldown = freshCooldown;
+		} else {
 			cooldown -= deltaTime;
 		}
-	//	Camera.setCameraX(x);
-	//	Camera.setCameraY(y);
+		// Camera.setCameraX(x);
+		// Camera.setCameraY(y);
 	}
-	private double keepInBound(double i, double j){
-		if(i < -j){
+
+	private double keepInBound(double i, double j) {
+		if (i < -j) {
 			return -j;
 		}
-		if(i >  j){
+		if (i > j) {
 			return j;
 		}
 		return i;
 	}
-	private double subToZero(double i, double j){
+
+	private double subToZero(double i, double j) {
 		double out = 0;
-		if(i == 0){
+		if (i == 0) {
 			out = 0;
-		} else if(i > 0){
-			out = i-j;
-			if(out < 0){
+		} else if (i > 0) {
+			out = i - j;
+			if (out < 0) {
 				out = 0;
 			}
 		} else {
-			out = i+j;
-			if(out > 0){
+			out = i + j;
+			if (out > 0) {
 				out = 0;
 			}
 		}
 		return out;
 	}
-	
-	private double  direction(double x, double y) {
-	    if (x > 0)
-	        return Math.atan(y/x);
-	    if (x < 0)
-	        return Math.atan(y/x)+Math.PI;
-	    if (y > 0)
-	        return Math.PI/2;
-	    if (y < 0)
-	        return -Math.PI/2;
-	    return 0; // no direction
+
+	private double direction(double x, double y) {
+		if (x > 0)
+			return Math.atan(y / x);
+		if (x < 0)
+			return Math.atan(y / x) + Math.PI;
+		if (y > 0)
+			return Math.PI / 2;
+		if (y < 0)
+			return -Math.PI / 2;
+		return 0; // no direction
 	}
-	
-	public Image getImage(){
+
+	public Image getImage() {
 		return image;
 	}
-	
-	public double getX(){
+
+	public double getX() {
 		return x;
 	}
-	
-	public double getY(){
+
+	public double getY() {
 		return y;
 	}
-	
+
 	private void move(double lastActionDelta, int speed, double direction) {
 		double nextX = nextXPosition(lastActionDelta, speed, direction);
 		double nextY = nextYPosition(lastActionDelta, speed, direction);
-		
+
 		ArrayList<Entity> entities = new ArrayList<Entity>(Camera.getVisibleEntities());
 		if (!entities.isEmpty()) {
-			Util.quickSort(entities,this);
+			Util.quickSort(entities, this);
 			for (Entity i : (entities)) {
-				if (!i.isCollidable()){
+				if (!i.isCollidable()) {
 					continue;
 				}
-					Rectangle hitBox = collisionBox(i);
-					boolean none = true;
-					while (hitBox.intersects(nextX, nextY, WIDTH, HEIGHT)) {
-						none = true;
-						if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
-							nextX -= (Math.cos(Math.toRadians(direction)))/2;
-							xSpeed = subToZero(xSpeed,acceleration * lastActionDelta * 0.25);
-							none = false;
-						}
-						if (hitBox.intersects(x, nextY, WIDTH, HEIGHT)) {
-							nextY -= (Math.sin(Math.toRadians(direction)))/2;
-							ySpeed = subToZero(ySpeed,acceleration * lastActionDelta * 0.25);
-							none = false;
-						}
-						if (none) {
-							nextY = y;
-							nextX = x;
-						}
-						
+				Rectangle hitBox = collisionBox(i);
+				boolean none = true;
+				while (hitBox.intersects(nextX, nextY, WIDTH, HEIGHT)) {
+					none = true;
+					if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
+						nextX -= (Math.cos(Math.toRadians(direction))) / 2;
+						xSpeed = subToZero(xSpeed, acceleration * lastActionDelta * 0.25);
+						none = false;
+					}
+					if (hitBox.intersects(x, nextY, WIDTH, HEIGHT)) {
+						nextY -= (Math.sin(Math.toRadians(direction))) / 2;
+						ySpeed = subToZero(ySpeed, acceleration * lastActionDelta * 0.25);
+						none = false;
+					}
+					if (none) {
+						nextY = y;
+						nextX = x;
+					}
+
 				}
 			}
 		}
@@ -180,7 +181,7 @@ public class FirstPlayer extends Entity {
 		this.y = nextY;
 
 	}
-	
+
 	private double nextXPosition(double lastActionDelta, int xSpeed, double direction) {
 		return this.x + (Math.cos(Math.toRadians(direction)) * xSpeed * lastActionDelta);
 	}
@@ -188,9 +189,5 @@ public class FirstPlayer extends Entity {
 	private double nextYPosition(double lastActionDelta, int ySpeed, double direction) {
 		return this.y + (Math.sin(Math.toRadians(direction)) * ySpeed * lastActionDelta);
 	}
-	
-	
-	
-	
 
 }

@@ -28,7 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tech.mia2b.cns.assets.Images;
-import tech.mia2b.cns.entities.enemies.FirstEnemy;
+import tech.mia2b.cns.entities.enemies.Wall;
 import tech.mia2b.cns.entities.player.FirstPlayer;
 import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Control;
@@ -64,9 +64,8 @@ public class Main extends Application {
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
 		Images.loadSprites();
+		MazeCreator.createMaze(8);
 		Entities.addEntity(new FirstPlayer());
-		Entities.addEntity(new FirstEnemy(0,0));
-		MazeCreator.createMaze(30);
 		
 		primaryStage.setScene(gameWindow);
 		primaryStage.show();

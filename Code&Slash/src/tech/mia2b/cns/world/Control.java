@@ -14,13 +14,14 @@ public class Control {
 	static Image image = new Image("textures/Ground.png");
    
 	public static void update(double deltaTime){
+		Camera.setVisibleEntities();
 		for(Entity entity: new ArrayList<Entity>(Entities.getEntities())){
 			entity.action(deltaTime);
 		}
 	}
 	
 	public static void render(){
-		gc.drawImage(image, 0, 0);
+		//gc.drawImage(image, 0, 0);
 		for(Entity entity: new ArrayList<Entity>(Camera.getVisibleEntities())){
 			gc.drawImage(entity.getImage(), entity.getX()-Camera.getCameraX()+ Camera.getBufferWidth(), entity.getY()-Camera.getCameraY()+ Camera.getBufferHeight());
 		}

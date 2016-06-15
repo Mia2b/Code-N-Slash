@@ -48,11 +48,9 @@ public class Entity implements Cloneable{
 
 	}
 	public boolean isAttackable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	public void takeDamage(double baseDamage) {
-		// TODO Auto-generated method stub
 		
 	}
 }

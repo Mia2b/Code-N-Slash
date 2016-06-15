@@ -5,15 +5,15 @@ import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.world.Entities;
 
-public class FirstEnemy extends Entity {
+public class Wall extends Entity {
 	private Image image = Images.getSprite(1);
 	private double y = 0;
 	private double x = 0;
 	private boolean collidable = true;
 	private int width = 64, height = 64;
-	private int hp = 1000;
+	private int hp = 100000;
 
-	public FirstEnemy(double x, double y) {
+	public Wall(double x, double y) {
 		this.x = x;
 		this.y = y;
 
@@ -46,16 +46,12 @@ public class FirstEnemy extends Entity {
 	public int getHeight() {
 		return height;
 	}
-	public void action(double deltaTime){
-		if(hp<=0){
-			die();
-		}
-	}
 	public int getDistanceFrom(Entity ent){
 		int deltaX = (int) (this.x - ent.getX());
 		int deltaY = (int) (this.y - ent.getY());
 		return (int)(Math.sqrt(deltaX * deltaX) + (deltaY * deltaY));
 	}
+	
 	private void die(){
 		Entities.removeEntity(this);
 	}

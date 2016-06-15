@@ -15,8 +15,8 @@ public class BasicAttack extends Entity {
 	private double x = 0;
 	private double y = 0;
 	private double direction = 0;
-	private double speed = 512;
-	private double baseDamage = 100;
+	private double speed = 1024;
+	private double baseDamage = 350;
 	
 	
 	public BasicAttack (double x, double y, double direction ){

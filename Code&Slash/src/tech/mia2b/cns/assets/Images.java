@@ -13,9 +13,11 @@ public class Images {
 	public static void loadSprites(){
 		if(!loaded){
 			images.add(new Image(path + "earth.png",32,32,false,false));
-			images.add(new Image(path + "space.png",64,64,false,false));
+			images.add(new Image(path + "wall.png",64,64,false,false));
 			images.add(new Image(path + "stars.png",32,32,false,false));
-			images.add(new Image(path + "sun.png",16,16,false,false));
+			images.add(new Image(path + "Sun.png",16,16,false,false));
+			images.add(new Image(path + "grass.png",64,64,false,false));
+			images.add(new Image(path + "baddie.png",48,48,false,false));
 			loaded = true;
 		}
 	}

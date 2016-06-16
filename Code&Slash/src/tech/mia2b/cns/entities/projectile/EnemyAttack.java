@@ -36,13 +36,15 @@ public class EnemyAttack extends Entity {
 		ArrayList<Entity> entities = new ArrayList<Entity>(Camera.getVisibleEntities());
 		if (!entities.isEmpty()) {
 			for (Entity i : (entities)) {
-				if (!i.isPlayer()){
-					continue;
-				}
+				if (i.isPlayer() || i.isCollidable()){
 					Rectangle hitBox = collisionBox(i);
 					if (hitBox.intersects(x, y, 16, 16)) {
 						attack(i);	
 					}	
+				}else{
+					continue;
+				}
+					
 				}
 			}
 		}

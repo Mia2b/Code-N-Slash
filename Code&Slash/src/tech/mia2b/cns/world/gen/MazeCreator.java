@@ -14,7 +14,7 @@ public class MazeCreator {
 					Cluster.wallCluster((int)((i*blockSize)-(size*blockSize/2)-(blockSize/1.5)),(int)((j*blockSize)-(size*blockSize/2)-(blockSize/1.5)), clusterSize,wh);
 					//Entities.addEntity(new Wall(i*128,j*128));
 				}else{
-					//Cluster.grassCluster(i*(wh*clusterSize),j*(wh*clusterSize), clusterSize,wh);
+					Cluster.grassCluster((int)((i*blockSize)-(size*blockSize/2)-(blockSize/1.5)),(int)((j*blockSize)-(size*blockSize/2)-(blockSize/1.5)), clusterSize,wh);
 				}
 				
 					
@@ -24,7 +24,7 @@ public class MazeCreator {
 		for (int i = 0; i < mapArray.length; i++) {
 			for (int j = 0; j < mapArray[0].length; j++) {
 				if(mapArray[i][j] != 1){
-					//Cluster.enemyCluster(i*(wh*clusterSize),j*(wh*clusterSize), clusterSize,wh);
+					Cluster.enemyCluster((int)((i*blockSize)-(size*blockSize/2)-(blockSize/1.5)),(int)((j*blockSize)-(size*blockSize/2)-(blockSize/1.5)), clusterSize,wh);
 				}
 			}
 		}

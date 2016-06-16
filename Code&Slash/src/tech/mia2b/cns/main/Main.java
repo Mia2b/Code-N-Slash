@@ -1,6 +1,11 @@
 package tech.mia2b.cns.main;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
@@ -25,9 +30,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
 import tech.mia2b.cns.entities.enemies.Wall;
@@ -65,18 +73,32 @@ public class Main extends Application {
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
 		Images.loadSprites();
-		MazeCreator.createMaze(9,5);
+		MazeCreator.createMaze(9,6);
 		
 		Entities.addEntity(new FirstPlayer(0,0));
 		
 		primaryStage.setScene(gameWindow);
+		play("sounds/song.wav");
 		primaryStage.show();
 
 	}
 	public static void setpro(double i){
 		pb.setProgress(i);
 	}
-
+	public static void play(String filename)
+	{
+	    try
+	    {
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(AudioSystem.getAudioInputStream(new File(filename)));
+	        clip.start();
+	        System.out.println("playing");
+	    }
+	    catch (Exception exc)
+	    {
+	        exc.printStackTrace(System.out);
+	    }
+	}
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
 		
 		double scale = 1.5;
@@ -181,6 +203,9 @@ public class Main extends Application {
 		}.start();
 		pb = new ProgressBar(0.0);
 		pb.setPrefWidth(400);
+		
+		
+
 		
 		root.getChildren().addAll(canvas, vbButtons,pb);
 		return gameScene;

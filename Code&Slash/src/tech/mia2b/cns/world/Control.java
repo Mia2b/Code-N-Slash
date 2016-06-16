@@ -15,6 +15,7 @@ public class Control {
    
 	public static void update(double deltaTime){
 		Camera.setVisibleEntities();
+		//for(Entity entity: new ArrayList<Entity>(Entities.getEntities())){
 		for(Entity entity: new ArrayList<Entity>(Camera.getVisibleEntities())){
 			entity.action(deltaTime);
 		}

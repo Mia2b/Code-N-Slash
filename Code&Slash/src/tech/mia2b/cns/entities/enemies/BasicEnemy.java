@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
+import tech.mia2b.cns.entities.projectile.EnemyAttack;
 import tech.mia2b.cns.main.Util;
 import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Entities;
@@ -21,11 +22,18 @@ public class BasicEnemy extends Entity {
 	private boolean collidable = false;
 	private int WIDTH = 48, HEIGHT = 48;
 	private int hp = 1000;
-	private int speed = 100;
+	private int speed = 164;
+	private boolean shouldMove = false;
+	private boolean attacker = false;
 
 	public BasicEnemy(double x, double y) {
 		this.x = x;
 		this.y = y;
+		speed = (int) (Math.random()*450);
+		
+		if (speed < 150){
+			attacker = true;
+		}
 
 	}
 
@@ -42,27 +50,36 @@ public class BasicEnemy extends Entity {
 	}
 
 	public void action(double deltaTime) {
-		
+		shouldMove = false;
 		if (hp < 0) {
 			die();
 		}
+		
 		ArrayList<Entity> entities = new ArrayList<Entity>(Camera.getVisibleEntities());
 		if (!entities.isEmpty()) {
 			for (Entity i : (entities)) {
-				if (!i.isPlayer()){
+				if (!i.isPlayer() || !(i.getDistanceFrom(this) < 400)) {
 					continue;
 				}
-					Rectangle hitBox = collisionBox(i);
-					if (hitBox.intersects(x, y, WIDTH, HEIGHT)) {
-						attack(i);	
-					}	
+				direction =  (int) Math.toDegrees(direction(i.getX()-x,i.getY()-y));
+				shouldMove = true;
+				Rectangle hitBox = collisionBox(i);
+				if (hitBox.intersects(x, y, WIDTH, HEIGHT)) {
+					attack(i,deltaTime);
 				}
+				if(attacker && (Math.random()*50) < 3){
+					Entities.addEntity(new EnemyAttack(x+24,y+24,direction));
+				}
+				
 			}
-		//move(deltaTime,speed,direction);
+		}
+		if(shouldMove){
+			move(deltaTime,speed,direction);
+		}
+		
+
 	}
-	
-		
-		
+
 	public boolean isAttackable() {
 		return true;
 	}
@@ -79,12 +96,7 @@ public class BasicEnemy extends Entity {
 		return HEIGHT;
 	}
 
-	public int getDistanceFrom(Entity ent) {
-		int deltaX = (int) (this.x - ent.getX());
-		int deltaY = (int) (this.y - ent.getY());
-		return (int) (Math.sqrt(deltaX * deltaX) + (deltaY * deltaY));
-	}
-
+	
 	private void die() {
 		Entities.removeEntity(this);
 	}
@@ -92,8 +104,9 @@ public class BasicEnemy extends Entity {
 	public void takeDamage(double damage) {
 		hp -= damage;
 	}
-	private void attack(Entity player){
-		player.takeDamage(100);
+
+	private void attack(Entity player,double deltaTime) {
+		player.takeDamage(100*deltaTime);
 	}
 
 	private void move(double lastActionDelta, int speed, double direction) {
@@ -104,7 +117,7 @@ public class BasicEnemy extends Entity {
 		if (!entities.isEmpty()) {
 			Util.quickSort(entities, this);
 			for (Entity i : (entities)) {
-				if (!i.isCollidable()|| i.equals(this)) {
+				if (!i.isCollidable() || i.equals(this)) {
 					continue;
 				}
 				Rectangle hitBox = collisionBox(i);
@@ -137,5 +150,17 @@ public class BasicEnemy extends Entity {
 
 	private double nextYPosition(double lastActionDelta, int ySpeed, double direction) {
 		return this.y + (Math.sin(Math.toRadians(direction)) * ySpeed * lastActionDelta);
+	}
+	
+	private double direction(double x, double y) {
+		if (x > 0)
+			return Math.atan(y / x);
+		if (x < 0)
+			return Math.atan(y / x) + Math.PI;
+		if (y > 0)
+			return Math.PI / 2;
+		if (y < 0)
+			return -Math.PI / 2;
+		return 0; // no direction
 	}
 }

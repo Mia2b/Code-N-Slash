@@ -22,10 +22,18 @@ public class Cluster {
 		}
 	}
 	public static void enemyCluster(int x, int y, int size, int wh){
+		int placeX;
+		int placeY;
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if(((int)(Math.random()*20))<= 5){
-					Entities.addEntity(new BasicEnemy(8+x+(wh*i), 8+y+(wh*j)));
+					placeX = 8+x+(wh*i);
+					placeY = 8+y+(wh*j);
+					if((placeX < 500 && placeX >-500)&&(placeY < 500 && placeY>-500)){
+						
+					}else{
+						Entities.addEntity(new BasicEnemy(placeX,placeY ));
+					}
 				}
 			}
 		}

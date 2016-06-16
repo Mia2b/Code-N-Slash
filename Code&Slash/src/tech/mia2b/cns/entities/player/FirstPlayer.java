@@ -22,31 +22,31 @@ public class FirstPlayer extends Entity {
 	private double speed = 0;
 	private int direction = 0;
 	private int maxSpeed = 300;
-	private int acceleration = maxSpeed * 2;
-	private int WIDTH = 30, HEIGHT = 30;
+	private int acceleration = maxSpeed * 3;
+	private int WIDTH = 32, HEIGHT = 32;
 	private boolean player = true;
 	private double cooldown = 0;
-	private double freshCooldown = 0.075;
+	private double freshCooldown = 0.1;
+	private double passiveCooldown = 1;
+	private double frashPassiveCooldown = 3;
 	private double lerp = 8;
 	private double hp = 10000;
-	private boolean active = false;
+	private double mouseDirection = 0;
 
 	private Image image = Images.getSprite(0);
 
 	public FirstPlayer(int x, int y) {
 		this.x = x;
 		this.y = y;
-		for(int i = 0;i < 360;i++){
-			Entities.addEntity(new BasicAttack(x,y,i));
-		}
+		
 	}
 	public boolean isPlayer(){
 		return player;
 	}
 	public void action(double deltaTime) {
-		System.out.println(x + " | " + y);
+		//System.out.println(x + " | " + y + " | "+ direction);
 		if(hp<=0){
-			System.out.println(this+ "died");
+			System.out.println(this+ " died");
 			die();
 		}
 		if (Input.hasKey("W")) { // ^ y
@@ -93,19 +93,19 @@ public class FirstPlayer extends Entity {
 		Camera.setCameraY(Camera.getCameraY() + ((((y + HEIGHT / 2) - Camera.getCameraY()) * lerp) * deltaTime));
 
 		if (Input.isMousePressed() && cooldown <= 0) {
-			Entities.addEntity(new BasicAttack(x + (WIDTH / 4), y + (HEIGHT / 4),
-					Math.toDegrees(direction(
-							Input.getMouseX()+Camera.getCameraX()-Camera.getBufferWidth()-x//-(WIDTH/2)
-							,
-							Input.getMouseY()+Camera.getCameraY()-Camera.getBufferHeight()-y//-(HEIGHT/2)
-							))));
+			mouseDirection = Math.toDegrees(direction(
+					Input.getMouseX()+Camera.getCameraX()-Camera.getBufferWidth()-x//-(WIDTH/2)
+					,
+					Input.getMouseY()+Camera.getCameraY()-Camera.getBufferHeight()-y//-(HEIGHT/2)
+					));
+			Entities.addEntity(new BasicAttack(x + (WIDTH / 4), y + (HEIGHT / 4),mouseDirection));
+			Entities.addEntity(new BasicAttack(x + (WIDTH / 4), y + (HEIGHT / 4),mouseDirection+8));
+			Entities.addEntity(new BasicAttack(x + (WIDTH / 4), y + (HEIGHT / 4),mouseDirection-8));
 			cooldown = freshCooldown;
 		} else {
 			cooldown -= deltaTime;
 		}
-		
-		//Camera.setCameraX(x);
-		//Camera.setCameraY(y);
+		passiveCooldown-=deltaTime;
 		Main.setpro(hp/10000);
 	}
 
@@ -184,12 +184,12 @@ public class FirstPlayer extends Entity {
 					
 					none = true;
 					if (hitBox.intersects(nextX, y, WIDTH, HEIGHT)) {
-						nextX -= (Math.cos(Math.toRadians(direction))) / 2;
+						nextX -= (Math.cos(Math.toRadians(direction))) ;
 						xSpeed = subToZero(xSpeed, acceleration * lastActionDelta * 0.25);
 						none = false;
 					}
 					if (hitBox.intersects(x, nextY, WIDTH, HEIGHT)) {
-						nextY -= (Math.sin(Math.toRadians(direction))) / 2;
+						nextY -= (Math.sin(Math.toRadians(direction))) ;
 						ySpeed = subToZero(ySpeed, acceleration * lastActionDelta * 0.25);
 						none = false;
 					}
@@ -215,11 +215,24 @@ public class FirstPlayer extends Entity {
 		return this.y + (Math.sin(Math.toRadians(direction)) * ySpeed * lastActionDelta);
 	}
 	public void takeDamage(double damage) {
-		if(active)
+		if(passiveCooldown<=0){
+			for(int i = 0;i < 360;i+=5){
+			Entities.addEntity(new BasicAttack(x,y,i));
+			passiveCooldown= frashPassiveCooldown;
+			}
+		}else{
 		hp -= damage;
+		}
 	}
 	private void die() {
+		
 		Entities.removeEntity(this);
+	}
+	
+	public int getDistanceFrom(Entity ent){
+		int deltaX = (int) (this.x - ent.getX());
+		int deltaY = (int) (this.y - ent.getY());
+		return (int)(Math.sqrt((deltaX * deltaX) + (deltaY * deltaY)));
 	}
 	
 }

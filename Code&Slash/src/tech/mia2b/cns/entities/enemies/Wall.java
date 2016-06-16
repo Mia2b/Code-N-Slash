@@ -49,7 +49,7 @@ public class Wall extends Entity {
 	public int getDistanceFrom(Entity ent){
 		int deltaX = (int) (this.x - ent.getX());
 		int deltaY = (int) (this.y - ent.getY());
-		return (int)(Math.sqrt(deltaX * deltaX) + (deltaY * deltaY));
+		return (int)(Math.sqrt((deltaX * deltaX) + (deltaY * deltaY)));
 	}
 	
 	private void die(){

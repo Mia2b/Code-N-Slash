@@ -11,12 +11,12 @@ import tech.mia2b.cns.world.Entities;
 
 public class BasicAttack extends Entity {
 	private Image image = Images.getSprite(3);
-	private double life = 10;
+	private double life = 1;
 	private double x = 0;
 	private double y = 0;
 	private double direction = 0;
-	private double speed = 256;
-	private double baseDamage = 350;
+	private double speed = 400;
+	private double baseDamage = 250;
 	
 	
 	public BasicAttack (double x, double y, double direction ){

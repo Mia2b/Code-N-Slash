@@ -11,11 +11,11 @@ public class Camera {
 	private static int bufferHeight = 1080;
 
 	
-	private static double CameraX = getBufferWidth();
-	private static double CameraY = getBufferHeight();
+	private static double CameraX = 0;
+	private static double CameraY = 0;
 	
 	private static int renderBuffer = 64;
-#
+
 	private static volatile ArrayList<Entity> visibleEntities = new ArrayList<Entity>();
 
 	public static int getCameraX() {

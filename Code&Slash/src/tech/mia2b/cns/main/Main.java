@@ -1,8 +1,6 @@
 package tech.mia2b.cns.main;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -30,15 +28,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import tech.mia2b.cns.assets.Images;
-import tech.mia2b.cns.entities.Entity;
-import tech.mia2b.cns.entities.enemies.Wall;
 import tech.mia2b.cns.entities.player.FirstPlayer;
 import tech.mia2b.cns.world.Camera;
 import tech.mia2b.cns.world.Control;
@@ -51,6 +44,8 @@ public class Main extends Application {
 	Globals globals = JsePlatform.standardGlobals();
 	LuaValue chunk = globals.load("print 'hello, world'");
 	static ProgressBar pb;
+	static Button btnReset;
+
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
@@ -73,38 +68,47 @@ public class Main extends Application {
 		gameWindow = gameWindow(primaryStage, gameWindow, codeWindow, gameRoot);
 
 		Images.loadSprites();
-		MazeCreator.createMaze(9,6);
-		
-		Entities.addEntity(new FirstPlayer(0,0));
-		
+		MazeCreator.createMaze(9, 6);
+
+		Entities.addEntity(new FirstPlayer(0, 0));
+
 		primaryStage.setScene(gameWindow);
 		play("sounds/song.wav");
 		primaryStage.show();
 
 	}
-	public static void setpro(double i){
+
+	public static void setpro(double i) {
 		pb.setProgress(i);
 	}
-	public static void play(String filename)
-	{
-	    try
-	    {
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(AudioSystem.getAudioInputStream(new File(filename)));
-	        clip.start();
-	        System.out.println("playing");
-	    }
-	    catch (Exception exc)
-	    {
-	        exc.printStackTrace(System.out);
-	    }
+	public static void showReset(){
+		btnReset.setVisible(true);
 	}
+
+	public static void play(String filename) {
+		try {
+			Clip clip = AudioSystem.getClip();
+			clip.open(AudioSystem.getAudioInputStream(new File(filename)));
+			clip.start();
+			System.out.println("playing");
+		} catch (Exception exc) {
+			exc.printStackTrace(System.out);
+		}
+	}
+
 	private Scene gameWindow(Stage primaryStage, Scene gameScene, Scene changeTo, Group root) {
-		
+
 		double scale = 1.5;
 		Canvas canvas = new Canvas(gameScene.getWidth(), gameScene.getHeight());
 		canvas.setScaleX(scale);
 		canvas.setScaleY(scale);
+
+		pb = new ProgressBar(0.0);
+		pb.setPrefWidth(400);
+		pb.setPrefHeight(40);
+		pb.setLayoutX(gameScene.getWidth() / 2 - 200);
+		pb.setLayoutY(gameScene.getHeight() - 100);
+
 		Button btnSwitch = new Button("Code");
 
 		btnSwitch.setMaxWidth(Double.MAX_VALUE);
@@ -119,43 +123,63 @@ public class Main extends Application {
 				primaryStage.setScene(changeTo);
 			}
 		});
-		/*
-		root.setOnMousePressed(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		        System.out.println(event.getSceneX());
-		        System.out.println(event.getSceneY());
-		    }
+		
+		btnReset = new Button("       You Died!\n"
+								   + "Click here to resart");
+		btnReset.setPrefHeight(64);
+		btnReset.setPrefWidth(128);
+		btnReset.setLayoutX(gameScene.getWidth()/2-64);
+		btnReset.setLayoutY(gameScene.getHeight()/2-32);
+		btnReset.setVisible(false);
+		btnReset.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Entities.removeAll();
+				MazeCreator.createMaze(9, 6);
+
+				Entities.addEntity(new FirstPlayer(0, 0));
+				Camera.setCameraX(0);
+				Camera.setCameraY(0);
+				btnReset.setVisible(false);
+			}
 		});
-		*/
+		/*
+		 * root.setOnMousePressed(new EventHandler<MouseEvent>() {
+		 * 
+		 * @Override public void handle(MouseEvent event) {
+		 * System.out.println(event.getSceneX());
+		 * System.out.println(event.getSceneY()); } });
+		 */
 		root.setOnMousePressed(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		    	Input.setMouseX(event.getSceneX());
-		    	Input.setMouseY(event.getSceneY());
-		    	Input.setMousePressed(true);
-		    }
+			@Override
+			public void handle(MouseEvent event) {
+				Input.setMouseX(event.getSceneX());
+				Input.setMouseY(event.getSceneY());
+				Input.setMousePressed(true);
+			}
 		});
 		root.setOnMouseReleased(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		    	Input.setMousePressed(false);
-		    }
+			@Override
+			public void handle(MouseEvent event) {
+				Input.setMousePressed(false);
+			}
 		});
 		root.setOnMouseDragged(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		    	Input.setMouseX(event.getSceneX());
-		    	Input.setMouseY(event.getSceneY());
-		    }
+			@Override
+			public void handle(MouseEvent event) {
+				Input.setMouseX(event.getSceneX());
+				Input.setMouseY(event.getSceneY());
+			}
 		});
-		
+
 		gameScene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
 					Number newSceneWidth) {
 				canvas.setWidth(newSceneWidth.intValue());
-				Camera.setBufferWidth(newSceneWidth.intValue()/2);
+				Camera.setBufferWidth(newSceneWidth.intValue() / 2);
+				pb.setLayoutX(newSceneWidth.intValue() / 2 - 200);
+				btnReset.setLayoutX(newSceneWidth.intValue()/2-64);
 			}
 		});
 		gameScene.heightProperty().addListener(new ChangeListener<Number>() {
@@ -163,7 +187,10 @@ public class Main extends Application {
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
 					Number newSceneHeight) {
 				canvas.setHeight(newSceneHeight.intValue());
-				Camera.setBufferHeight(newSceneHeight.intValue()/2);
+				Camera.setBufferHeight(newSceneHeight.intValue() / 2);
+				pb.setLayoutY(newSceneHeight.intValue() - 100);
+				btnReset.setLayoutY(newSceneHeight.intValue()/2-32);
+
 			}
 		});
 
@@ -201,41 +228,34 @@ public class Main extends Application {
 
 			}
 		}.start();
-		pb = new ProgressBar(0.0);
-		pb.setPrefWidth(400);
-		
-		
 
-		
-		root.getChildren().addAll(canvas, vbButtons,pb);
+		root.getChildren().addAll(canvas, vbButtons, pb, btnReset);
 		return gameScene;
 	}
 
 	private Scene codeWindow(Stage primaryStage, Scene scene, Scene changeTo, Group root) {
 
 		String filePath = "F:\\res\\Testing.lua";
-		
-
 
 		GridPane gridpane = new GridPane();
 		gridpane.setPadding(new Insets(16));
-		
+
 		Button btnSwitch = new Button("World");
 		Button btnSave = new Button("Save");
 		Button btnLoad = new Button("Load");
 		Button btnRun = new Button("Run");
 		Button btnImport = new Button("Import");
-		
+
 		btnSwitch.setMaxWidth(Double.MAX_VALUE);
 		btnSave.setMaxWidth(Double.MAX_VALUE);
 		btnLoad.setMaxWidth(Double.MAX_VALUE);
 		btnRun.setMaxWidth(Double.MAX_VALUE);
 		btnImport.setMaxWidth(Double.MAX_VALUE);
-		
+
 		VBox vbButtons = new VBox();
 		vbButtons.setSpacing(8);
 		vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth() - 64));
-		vbButtons.getChildren().addAll(btnSwitch,btnSave, btnLoad,btnRun, btnImport);
+		vbButtons.getChildren().addAll(btnSwitch, btnSave, btnLoad, btnRun, btnImport);
 
 		final TextArea textBox = new TextArea();
 		textBox.setPrefWidth(scene.getWidth() - 96);
@@ -243,14 +263,13 @@ public class Main extends Application {
 		GridPane.setHalignment(textBox, HPos.CENTER);
 		gridpane.add(textBox, 0, 1);
 
-		
 		btnSwitch.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				primaryStage.setScene(changeTo);
 			}
 		});
-		
+
 		btnImport.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -260,11 +279,11 @@ public class Main extends Application {
 				textBox.setText(Util.readFile(file));
 			}
 		});
-		
+
 		btnSave.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Util.writeFile(filePath,textBox.getText());
+				Util.writeFile(filePath, textBox.getText());
 			}
 		});
 
@@ -296,7 +315,7 @@ public class Main extends Application {
 				textBox.setPrefWidth(newSceneWidth.intValue() - 96);
 			}
 		});
-		
+
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
@@ -308,7 +327,7 @@ public class Main extends Application {
 		vbButtons.setPadding(new Insets(16, 0, 0, scene.getWidth() - 64));
 		textBox.setPrefWidth(scene.getWidth() - 96);
 		textBox.setPrefHeight(scene.getHeight() - 32);
-		
+
 		root.getChildren().addAll(vbButtons, gridpane);
 		return scene;
 	}

@@ -3,7 +3,6 @@ package tech.mia2b.cns.entities.enemies;
 import javafx.scene.image.Image;
 import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
-import tech.mia2b.cns.world.Entities;
 
 public class Grass extends Entity {
 	private Image image = Images.getSprite(4);

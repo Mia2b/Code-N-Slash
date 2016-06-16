@@ -18,4 +18,7 @@ public class Entities {
 	public static void removeEntity(Entity ent){
 		entities.remove(ent);
 	}
+	public static void removeAll(){
+		entities.clear();
+	}
 }

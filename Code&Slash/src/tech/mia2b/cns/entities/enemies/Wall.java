@@ -3,7 +3,6 @@ package tech.mia2b.cns.entities.enemies;
 import javafx.scene.image.Image;
 import tech.mia2b.cns.assets.Images;
 import tech.mia2b.cns.entities.Entity;
-import tech.mia2b.cns.world.Entities;
 
 public class Wall extends Entity {
 	private Image image = Images.getSprite(1);
@@ -11,7 +10,7 @@ public class Wall extends Entity {
 	private double x = 0;
 	private boolean collidable = true;
 	private int width = 64, height = 64;
-	private int hp = 100000;
+	//private int hp = 100000;
 
 	public Wall(double x, double y) {
 		this.x = x;
@@ -51,11 +50,14 @@ public class Wall extends Entity {
 		int deltaY = (int) (this.y - ent.getY());
 		return (int)(Math.sqrt((deltaX * deltaX) + (deltaY * deltaY)));
 	}
-	
+	/*
 	private void die(){
 		Entities.removeEntity(this);
 	}
+	*/
+	/*
 	public void takeDamage(double damage){
 		hp -= damage;
 	}
+	*/
 }

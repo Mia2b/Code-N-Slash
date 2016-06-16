@@ -17,8 +17,8 @@ public class BasicEnemy extends Entity {
 	private double y = 0;
 	private double x = 0;
 	private int direction = 45;
-	private double cooldown = 0;
-	private double freshCooldown = 1.0;
+	//private double cooldown = 0;
+	//private double freshCooldown = 1.0;
 	private boolean collidable = false;
 	private int WIDTH = 48, HEIGHT = 48;
 	private int hp = 1000;
@@ -106,7 +106,7 @@ public class BasicEnemy extends Entity {
 	}
 
 	private void attack(Entity player,double deltaTime) {
-		player.takeDamage(100*deltaTime);
+		player.takeDamage(500*deltaTime);
 	}
 
 	private void move(double lastActionDelta, int speed, double direction) {

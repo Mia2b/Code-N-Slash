@@ -1,8 +1,6 @@
 package tech.mia2b.cns.world.gen;
 
-import tech.mia2b.cns.entities.Cluster;
-import tech.mia2b.cns.entities.enemies.Wall;
-import tech.mia2b.cns.world.Entities;;
+import tech.mia2b.cns.entities.Cluster;;
 public class MazeCreator {
 	public static void createMaze(int size, int clusterSize){
 		int wh = 64;

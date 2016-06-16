@@ -16,7 +16,7 @@ public class EnemyAttack extends Entity {
 	private double y = 0;
 	private double direction = 0;
 	private double speed = 300;
-	private double baseDamage = 500;
+	private double baseDamage = 300;
 	
 	
 	public EnemyAttack (double x, double y, double direction ){

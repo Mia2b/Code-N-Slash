@@ -2,7 +2,6 @@ package tech.mia2b.cns.entities.player;
 
 import java.util.ArrayList;
 
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import tech.mia2b.cns.assets.Images;
@@ -225,7 +224,7 @@ public class FirstPlayer extends Entity {
 		}
 	}
 	private void die() {
-		
+		Main.showReset();
 		Entities.removeEntity(this);
 	}
 	
